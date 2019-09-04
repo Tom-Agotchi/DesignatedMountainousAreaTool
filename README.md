@@ -3,8 +3,15 @@ Interactive tool that allows the user to adjust the parameters used in determini
 
 Designated Mountainous Areas (DMAs) were defined in the 1950's by just drawing simple bounding polygons on a map. The airspace in these areas have significantly different rules, and over the years, some exceptions have been made to omit areas from the original polygons, effectively designating them as non-mountainous.
 
-Agreeing on a modern definition to what should be designated mountainous will likely take many years, but this tool allows you to change the definition and view the result. It's fairly quick to paint the entire contiguous United States (CONUS).
+Agreeing on a modern definition to what should be designated mountainous will likely take many years, but this tool allows you to change the definition and view the result. It's fairly quick to paint the entire contiguous United States (CONUS). It's easy to see that this needs to be rethought now that we have the capability.
 
 This uses either the National Elevation Dataset (NED) or Digital Terrain Elevation Data as the original data.
 
-![CONUS ICAO Definition](https://github.com/TomAgatchi/DesignatedMountainousAreaTool/images/CONUS_ICAOdef_blueRed.PNG)
+![CONUS ICAO Definition](images/CONUS_ICAOdef_blueRed.PNG)
+![CONUS ICAO Definition](images/CONUS_radius5NMthreshold900m_blueRed_solid.PNG)
+![CONUS ICAO Definition](images/eastICAOdef_lowHigh_invisVis_sat.PNG)
+![CONUS ICAO Definition](images/easternICAOdef.PNG)
+![CONUS ICAO Definition](images/westernICAOdef.PNG)
+![CONUS ICAO Definition](images/CONUS_avg_0to4000m_inferno_solid.PNG)
+![CONUS ICAO Definition](images/CONUS_avg_0to4000m_viridis_solid_hillshaded.PNG)
+![CONUS ICAO Definition](images/CONUS_avg_0to4000m_inferno_solid.PNG)
