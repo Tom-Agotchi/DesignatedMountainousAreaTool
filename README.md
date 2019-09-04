@@ -16,3 +16,12 @@ This uses either the National Elevation Dataset (NED) or Digital Terrain Elevati
 ![alt_text](images/eastICAOdef_rainbow_base.PNG)
 ![alt_text](images/CONUS_avg_0to4000m_viridis_solid_hillshaded.PNG)
 ![alt_text](images/CONUS_avg_0to4000m_inferno_solid.PNG)
+
+
+How to use
+----------
+(only tested on windows 7 and windows 10 using either firefox or chrome browser)
+1. Run terrSimpleSvr.bat at DesignatedMountainousTerrainTool\srv\code\terrSimpleSvr.bat  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Server listening on port 8123 by default
+2. Connect clients by going to '[serverIP]:[port]/vis2.html' for Leaflet.js version
+3. Connect clients by going to '[serverIP]:[port]/vis.html' for MapBox version (requires API access token)
