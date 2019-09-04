@@ -7,4 +7,4 @@ Agreeing on a modern definition to what should be designated mountainous will li
 
 This uses either the National Elevation Dataset (NED) or Digital Terrain Elevation Data as the original data.
 
-![CONUS ICAO Definition](https://github.com/TomAgatchi/DesignatedMountainousTerrainTool/images/CONUS_ICAOdef_blueRed.PNG)
+![CONUS ICAO Definition](https://github.com/TomAgatchi/DesignatedMountainousAreaTool/images/CONUS_ICAOdef_blueRed.PNG)
