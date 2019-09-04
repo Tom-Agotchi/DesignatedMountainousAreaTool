@@ -6,3 +6,5 @@ Designated Mountainous Areas (DMAs) were defined in the 1950's by just drawing s
 Agreeing on a modern definition to what should be designated mountainous will likely take many years, but this tool allows you to change the definition and view the result. It's fairly quick to paint the entire contiguous United States (CONUS).
 
 This uses either the National Elevation Dataset (NED) or Digital Terrain Elevation Data as the original data.
+
+![CONUS ICAO Definition](https://github.com/TomAgatchi/DesignatedMountainousTerrainTool/images/CONUS_ICAOdef_blueRed.PNG)
