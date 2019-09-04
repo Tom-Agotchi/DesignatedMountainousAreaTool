@@ -13,6 +13,5 @@ This uses either the National Elevation Dataset (NED) or Digital Terrain Elevati
 ![alt_text](images/eastICAOdef_lowHigh_invisVis_sat.PNG)
 ![alt_text](images/easternICAOdef.PNG)
 ![alt_text](images/eastICAOdef_rainbow_base.PNG)
-![alt_text](images/CONUS_avg_0to4000m_inferno_solid.PNG)
 ![alt_text](images/CONUS_avg_0to4000m_viridis_solid_hillshaded.PNG)
 ![alt_text](images/CONUS_avg_0to4000m_inferno_solid.PNG)
