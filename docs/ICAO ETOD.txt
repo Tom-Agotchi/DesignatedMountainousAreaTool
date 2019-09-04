@@ -1,0 +1,32 @@
+https://gis.icao.int/icaoetod/
+
+3D Airport Terrain & Obstacle Databases (eTOD)
+
+By 2015, all ICAO Civil Aviations Authorities must capture this data for:
+
+Ground proximity warning system (MSAW) minimum safe altitude warning
+determination of contingency procedures for use in the event of an emergency during a missed approach or take-off
+Navaid-based Procedure Design
+PBN Procedure Design
+Engine-Out Procedure Design
+Noise-Abatement Procedure Design
+Drift-down/Let-down Procedure Design
+Pressurization-Failure Escape Routes
+Unmanned Aerial System (UAS) Airports, synthetic vision system
+Less CFIT and RS Accidents, more precise DTM vizualisation and elevation
+Better Airport GIS management (Edmonton Int)
+Transition AIS to AIM (Paper to Digital) chart production and on-board database
+Part of NextGen and SESAR
+Impacting the en-route phase of flight
+At the aerodrome impacting the circling area (ASMGCS) advanced surface movement guidance and control system
+At the aerodrome impacting the approuch / take-off phases of flight
+Analysis for Obstacle (height restriction) remove tower
+
+ICAO Annex 15 Chapter 10 & Appendix 8
+ICAO Annex 14 Chapter 2.5 & Appendix 5 (Tables 1 and 2)
+ICAO Annex 11 Appendix 5 (Tables 1 and 2)
+ICAO Annex 4 Chapter 6
+ICAO Doc 9881 Guidelines for Electronic Terrain, Obstacle and Aerodrome Mapping Information
+EUROCAE ED-98 (RTCA DO-276) - User Requirements for Terrain and Obstacle Data
+EUROCAE ED-119 (RTCA DO-291) - Interchange Standards for Terrain, Obstacle, and Aerodrome Mapping Data
+

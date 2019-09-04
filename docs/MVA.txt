@@ -1,0 +1,16 @@
+https://www.skybrary.aero/index.php/Minimum_Vectoring_Altitude_(MVA)
+
+The minimum vectoring altitude in each sector provides 1000 ft above the highest obstruction in non-mountainous areas and 2000 ft above the highest obstacle in designated mountainous areas.
+
+The MVA is the lowest altitude that meets obstacle clearance requirements in the airspace specified.
+
+According to ICAO PANS OPS minimum vectoring altitudes shall be corrected for temperature. The temperature correction shall be based on seasonal or annual minimum temperature records. (see Altimeter Temperature Error Correction)
+
+In turn, ATC authorities are required, as per ICAO PANS ATM, 8.6.5.2, Note 2, “to provide the controller with minimum altitudes corrected for temperature effect”.
+
+For example, if the OAT is - 40 °C then for a 2000 ft indicated altitude the true altitude is 1520 ft thus resulting in a lower than anticipated terrain separation and a potential obstacle-clearance hazard.
+
+The minimum vectoring altitude in each sector provides 1000 ft above the highest obstruction in non-mountainous areas and 2000 ft above the highest obstacle in designated mountainous areas.
+
+All low altitude approach procedure altitudes in mountainous regions (terrain of 3000 ft AMSL or higher)
+

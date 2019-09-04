@@ -1,0 +1,27 @@
+https://www.skybrary.aero/index.php/Flight_in_Mountainous_Terrain
+
+MOUNTAINOUS AREA (ICAO): An area of changing terrain profile where the changes of terrain elevation exceed 3000 feet (900m) within a distance of 10 NM.
+
+
+‘95a ‘mountainous area’ is an area of changing terrain profile where the changes of terrain elevation
+exceed values determined by the Competent Authority.’
+
+https://www.easa.europa.eu/sites/default/files/dfu/CRD%202014-05.pdf
+
+
+ICAO
+
+http://code7700.com/pdfs/icao_doc_8168_vol2.pdf
+
+ICAO 
+	Aircraft Operations
+	Volume II Construction of Visual and Instrument Flight Procedures
+
+	Chapter 1
+	DEFINITIONS
+
+	Page I-1-1-5
+
+Mountainous area. An area of changing terrain profile where the changes of terrain elevation exceed 900 m (3 000 ft)
+within a distance of 18.5 km (10.0 NM).
+

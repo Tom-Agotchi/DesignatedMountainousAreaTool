@@ -1,0 +1,2636 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>DMA Map</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+
+	<style type='text/css'>
+	.title{
+		font-size:64px;
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	.titlep{
+		width: 100%;
+		margin: 0 auto;
+	}
+	
+	#splashscreen{
+		position:absolute;
+		top:0px;
+		left:0px;
+		width:100%;
+		height:100%;
+		display:inline-block;
+		width: 100%;
+		text-align: center;
+	}
+
+	.splashscreenbutton{
+			
+		display:inline-block;
+		width:75%;
+		font-family: 'Open Sans', sans-serif;
+		font-size: 96px;
+		color: #404040;
+		text-decoration: none;
+		text-align: center;
+		vertical-align: center;
+		
+		-moz-box-shadow: 0px 1px 0px 2px #9fb4f2;
+		-webkit-box-shadow: 0px 1px 0px 2px #9fb4f2;
+		box-shadow: 0px 1px 0px 2px #9fb4f2;
+		background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
+		background:-moz-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+		background:-webkit-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+		background:-o-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+		background:-ms-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+		background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#7892c2', endColorstr='#476e9e',GradientType=0);
+		background-color:#7892c2;
+		-moz-border-radius:24px;
+		-webkit-border-radius:24px;
+		border-radius:24px;
+		border:1px solid #4e6096;
+		cursor:pointer;
+		color:#ffffff;
+		font-family:Arial;
+		font-size:28px;
+		padding:32px 76px;
+		text-decoration:none;
+		text-shadow:0px 1px 1px #283966;
+	}
+	.splashscreenbutton:hover {
+		background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+		background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+		background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+		background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+		background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+		background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#476e9e', endColorstr='#7892c2',GradientType=0);
+		background-color:#476e9e;
+	}
+	.splashscreenbutton:active {
+		position:relative;
+		top:1px;
+	}
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		#map {
+			width: 100%;
+			height: 100%;
+		}
+
+		#info {
+			pointer-events: none;
+			display: block;
+			/* position: relative; */
+			/* margin: 100px auto; */
+			position: absolute;
+			bottom: 10px;
+			right: 10px;
+			width: 98%;
+			padding: 10px;
+			border: none;
+			border-radius: 3px;
+			font-size: 18px;
+			text-align: right;
+			color: #222;
+			background: transparent;/* #fff; */
+			z-index:10000;
+			/* opacity: 0.5; */
+		}
+
+		#mapcontainer {
+
+			position: absolute;
+			top:0px;
+			left:0px;
+			width: 100%;
+			height: 100%;
+		}
+
+		#slide, #slide2 {
+			margin-left: auto;
+			margin-right: auto;
+			width: 50%;
+		}
+
+		/* #shading.leaflet-layer  {
+			mix-blend-mode: multiply;
+		} */
+
+		.leaflet-layer  {
+			mix-blend-mode: multiply;
+		}
+
+
+		input[type=range] {
+		  height: 25px;
+		  -webkit-appearance: none;
+		  margin: 10px 0;
+		  width: 100%;
+		}
+		input[type=range]:focus {
+		  outline: none;
+		}
+		input[type=range]::-webkit-slider-runnable-track {
+		  width: 100%;
+		  height: 5px;
+		  cursor: pointer;
+		  animate: 0.2s;
+		  box-shadow: 0px 0px 0px #000000;
+		  background: #2497E3;
+		  border-radius: 1px;
+		  border: 0px solid #000000;
+		}
+		input[type=range]::-webkit-slider-thumb {
+		  box-shadow: 0px 0px 0px #000000;
+		  border: 1px solid #2497E3;
+		  height: 18px;
+		  width: 18px;
+		  border-radius: 25px;
+		  background: #A1D0FF;
+		  cursor: pointer;
+		  -webkit-appearance: none;
+		  margin-top: -7px;
+		}
+		input[type=range]:focus::-webkit-slider-runnable-track {
+		  background: #2497E3;
+		}
+		input[type=range]::-moz-range-track {
+		  width: 100%;
+		  height: 5px;
+		  cursor: pointer;
+		  animate: 0.2s;
+		  box-shadow: 0px 0px 0px #000000;
+		  background: #2497E3;
+		  border-radius: 1px;
+		  border: 0px solid #000000;
+		}
+		input[type=range]::-moz-range-thumb {
+		  box-shadow: 0px 0px 0px #000000;
+		  border: 1px solid #2497E3;
+		  height: 18px;
+		  width: 18px;
+		  border-radius: 25px;
+		  background: #A1D0FF;
+		  cursor: pointer;
+		}
+		input[type=range]::-ms-track {
+		  width: 100%;
+		  height: 5px;
+		  cursor: pointer;
+		  animate: 0.2s;
+		  background: transparent;
+		  border-color: transparent;
+		  color: transparent;
+		}
+		input[type=range]::-ms-fill-lower {
+		  background: #2497E3;
+		  border: 0px solid #000000;
+		  border-radius: 2px;
+		  box-shadow: 0px 0px 0px #000000;
+		}
+		input[type=range]::-ms-fill-upper {
+		  background: #2497E3;
+		  border: 0px solid #000000;
+		  border-radius: 2px;
+		  box-shadow: 0px 0px 0px #000000;
+		}
+		input[type=range]::-ms-thumb {
+		  margin-top: 1px;
+		  box-shadow: 0px 0px 0px #000000;
+		  border: 1px solid #2497E3;
+		  height: 18px;
+		  width: 18px;
+		  border-radius: 25px;
+		  background: #A1D0FF;
+		  cursor: pointer;
+		}
+		input[type=range]:focus::-ms-fill-lower {
+		  background: #2497E3;
+		}
+		input[type=range]:focus::-ms-fill-upper {
+		  background: #2497E3;
+		}
+
+		.noselect {
+		  -webkit-touch-callout: none; /* iOS Safari */
+			-webkit-user-select: none; /* Safari */
+			 -khtml-user-select: none; /* Konqueror HTML */
+			   -moz-user-select: none; /* Firefox */
+				-ms-user-select: none; /* Internet Explorer/Edge */
+					user-select: none; /* Non-prefixed version, currently
+										  supported by Chrome and Opera */
+		}
+		
+		.nothing{
+			border: 0px;
+			margin: 0px;
+			padding: 0px;
+		}
+		
+		.left{
+			position: relative;
+			left: 0px;
+			text-align: left;
+		}
+		
+		.right{
+			position: relative;
+			align: center;
+			text-align: right;
+		}
+		
+		.center{
+			/*position: relative;*/
+			right: 50%
+			text-align: center;
+		}
+		
+		.inline{
+			display:inline-block;
+		}
+		
+		.elementlist{
+			position: absolute;
+			bottom: 10px;
+			right: 10px;
+			text-align: left;
+			list-style-type: none;
+			background: rgba(255,255,255,0.25);
+			font-family: 'Open Sans', sans-serif;
+		}
+		
+		.myTextStyle {
+			font-family:Arial;
+			font-size:15px;
+			font-weight:bold;
+			text-decoration:none;
+			text-shadow:0px 1px 0px #ffffff;
+			padding: 2px;
+		}
+		.asButton{
+			-webkit-appearance: button; /* WebKit */
+			-moz-appearance: button; /* Mozilla */
+			-o-appearance: button; /* Opera */
+			-ms-appearance: button; /* Internet Explorer */
+			appearance: button; /* CSS3 */
+		}
+		
+		.myStyle {
+			background: #fff;
+			border-radius: 3px;
+			
+			border: 1px solid rgba(0,0,0,0.4);
+			font-family: 'Open Sans', sans-serif;
+			
+			font-size: 13px;
+			color: #404040;
+			margin: 0;
+			padding: 0;
+			padding: 2px;
+			text-decoration: none;
+			border-bottom: 1px solid rgba(0,0,0,0.25);
+			text-align: center;
+		}
+
+		.myStyle last-child {
+			border: none;
+		}
+
+		.myStyle hover {
+			background-color: #f8f8f8;
+			color: #404040;
+		}
+
+		.myStyle active {
+			background-color: #3887be;
+			color: #ffffff;
+		}
+
+		.myStyle active:hover {
+			background: #3074a4;
+		}
+		
+		.block{
+			display:block;
+		}
+
+		.selectedbg {
+			background-color: #3887be;
+			color: #ffffff;
+		}
+		
+		.unselectedbg {
+			background-color: #303030;
+			color: #ffffff;
+		}
+
+		#ui_master{
+			position: absolute;
+			top:0px;
+			left:0px;
+			height:100%;
+			z-index: 500;
+		}
+		
+		.map-overlay .map-overlay-inner {
+			background-color: #fff;
+			box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+			border-radius: 3px;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+
+	</style>
+
+	
+</head>
+<body>
+
+	<div id='map'></div>
+	<div id='ui_master'>
+		<div class='map-overlay-inner noselect' id='ui_container'></div>
+	</div>
+	<div id='info' class="myStyle noselect"></div>
+	<div id="splashscreen"></div>
+
+<script>
+
+function rgbhextoColors( s )
+{
+	R = [];
+	var i = 0;
+	while( i < s.length ){
+	
+		var rchk = parseInt( s.substr( i, 2 ), 16);
+		var gchk = parseInt( s.substr( i+2, 2 ), 16);
+		var bchk = parseInt( s.substr( i+4, 2 ), 16);
+		
+		var f = ( i/s.length );
+		R.push( [ f, rchk, gchk, bchk, 1 ] );
+		
+		i += 6;
+	}
+	return R;
+}
+
+
+//Given a color scale, determine the interpolated color value (colorscale is a [] of [ value, r, g, b, a ] sorted by value from least 0 to greatest 1
+function value_to_color( colorvalue=0, color_scale )
+{
+	
+	let maxsize = color_scale.length;
+
+	//this might be more efficient :C stupid javascripts
+	let finali = color_scale.findIndex( function(a){ return colorvalue < a[0]; } );
+	if( finali < 0 ){ finali = maxsize; }
+
+	idex2 = finali;
+	
+	if( idex2 >= maxsize ){
+		idex2 = maxsize-1;
+		if( idex2 < 0 ){
+			idex2 = 0;
+		}
+	}
+	
+	let idex = idex2 - 1;
+	if( idex < 0 ){
+		idex = 0;
+	}
+	let cd1 = color_scale[idex];
+	let cd2 = color_scale[idex2];
+	
+	let f2 = 0.0
+	if( idex2 > idex ){
+		f2 = (colorvalue - cd1[0]);
+		let delty = cd2[0] - cd1[0];
+		if( delty > 0 ){
+			f2 /= delty;
+		}
+	}
+	let f1 = 1.0 - f2;
+	let rv = Math.floor( f1*cd1[1] + f2*cd2[1] );
+	let gv = Math.floor( f1*cd1[2] + f2*cd2[2] );
+	let bv = Math.floor( f1*cd1[3] + f2*cd2[3] );
+	let av = f1*cd1[4] + f2*cd2[4];
+	
+	if( rv < 0 ){ rv = 0; }else if( rv > 255 ){ rv = 255; }
+	if( gv < 0 ){ gv = 0; }else if( gv > 255 ){ gv = 255; }
+	if( bv < 0 ){ bv = 0; }else if( bv > 255 ){ bv = 255; }
+	if( av < 0.001 ){ av = 0; }else if( av >= 0.999 ){ av = 1; }	//1000 possible alpha levels with tolerance of 1/1000 of a level...
+
+	return "rgba("+rv+","+gv+","+bv+","+av+")"
+}
+
+
+function reqQueueElement( lon, lat, mydata = undefined )
+{
+	this.id = reqQueueElement.counter; reqQueueElement.counter += 1;
+	this.key = reqQueueElement.make_key( lon, lat );
+	this.lon = lon;
+	this.lat = lat;
+	this.data = mydata;
+	this.packed = [];
+	this.packeddata = undefined;
+	this.image = undefined;
+	this.coloring = undefined;
+	
+	//Format and compress mydata (avoid javascript bloating?)
+	//
+	//this.data.data[ lat ][ lon ][ radius_index ];	=> becomes?
+	//	get_cell( lat, lon ) <-->
+	//
+	if( this.data ){
+		
+		var grid = this.data.data;
+		//check radius list assumptions (hm)
+		
+		if( this.data.radiuslist ){
+			
+			var radiuslistlen = this.data.radiuslist.length;
+			
+			//find BOUNDS of grid entirely...
+			var latmin = 0;
+			var lonmin = 0;
+			var latmax = 0;
+			var lonmax = 0;
+			for( latkey in grid ){
+				latmin = Math.floor( Number( latkey ) )
+				latmax = latmin;
+				for( lonkey in grid[ latkey ] ){
+					lonmin = Math.floor( Number( lonkey ) )
+					lonmax = lonmin;
+					break;
+				}
+				break;
+			}
+			
+			for( latkey in grid ){
+				let lat = Math.floor( Number( latkey ) )
+				if( lat < latmin ){ latmin = lat; }
+				if( lat > latmax ){ latmax = lat; }
+				for( lonkey in grid[ latkey ] ){
+					let lon = Math.floor( Number( lonkey ) )
+					if( lon < lonmin ){ lonmin = lon; }
+					if( lon > lonmax ){ lonmax = lon; }
+				}
+			}
+			
+			lonmax += 1;	//because it's currently INCLUSIVE.
+			latmax += 1;
+			
+			//Create storage array (floats!)
+			//this.datapacked = new Float32Array( (latmax - latmin) * (lonmax - lonmin) * radiuslistlen * 4 );
+			
+			this.packed = [
+				latmin, latmax, latmax-latmin,	//0 1 2
+				lonmin, lonmax, lonmax-lonmin,	//3 4 5
+				0, radiuslistlen, radiuslistlen,	//6 7 8
+			];
+			
+			this.packeddata = new Float32Array( this.packed[2] * this.packed[5] * this.packed[8] * 4 );	//60*60*40 = 144000 floats, 562.5 kB per TILE.
+			
+			//Then, pack it all together in a CONSISTENT format (direct Float32Array rather than a jillion objects)
+			for( latkey in grid ){
+				let lat = Number( latkey );
+				let y = (lat - this.packed[0])
+				for( lonkey in grid[ latkey ] ){
+					let lon = Number( lonkey );
+					let x = (lon - this.packed[3])
+					var rdat = grid[ latkey ][ lonkey ];
+					let ir = this.packed[6];
+					while( ir < this.packed[7] ){
+						
+						let dats = rdat[ ir ];
+						
+						let coordi = 4*(ir + this.packed[8]*( x + this.packed[5]*( y ) ) );	//Accessor
+						this.packeddata[ coordi + 0 ] = dats[0];
+						this.packeddata[ coordi + 1 ] = dats[1];
+						this.packeddata[ coordi + 2 ] = dats[2];
+						this.packeddata[ coordi + 3 ] = dats[3];
+						
+						ir += 1;
+					}
+				}
+			}
+		}else{
+			//missing tile
+		}
+		this.data.data = undefined;	//Drop it.
+	}
+	
+}
+reqQueueElement.counter = 1;
+
+reqQueueElement.make_key = function( lon, lat )
+{
+	return Math.floor( lat )+'_'+ Math.floor( lon );
+}
+
+reqQueueElement.prototype.get_data_at = function( lat, lon, radiusindex )
+{
+	let y = Math.floor( lat ) - this.packed[0];
+	let x = Math.floor( lon ) - this.packed[3];
+	let ir = radiusindex - this.packed[6];
+	let coordi = 4*(ir + this.packed[8]*( x + this.packed[5]*( y ) ) );	//Accessor
+	if( (coordi >= 0) && (coordi < this.packeddata.length) ){
+		return [ this.packeddata[ coordi ], this.packeddata[ coordi + 1 ], this.packeddata[ coordi + 2 ], this.packeddata[ coordi + 3 ] ];
+	}
+	return 0;
+}
+reqQueueElement.prototype.get_key = function()
+{
+	return this.key;
+}
+
+reqQueueElement.prototype.get_id_counter = function()
+{
+	return reqQueueElement.counter;
+}
+
+reqQueueElement.prototype.get_id = function()
+{
+	return this.id;
+}
+
+reqQueueElement.prototype.set_id = function( v )
+{
+	this.id = v;
+}
+
+reqQueueElement.prototype.set_data = function( v )
+{
+	this.data = v;
+}
+
+reqQueueElement.prototype.get_data = function()
+{
+	return this.data;
+}
+
+reqQueueElement.prototype.free = function()
+{
+	if( this.packeddata ){
+		delete this.packeddata;
+		this.packeddata = undefined;
+	}
+	if( this.image ){
+		if( this.image.parentNode ){
+			this.image.parentNode.removeChild( this.image );
+		}
+		if( this.image ){
+			delete this.image;
+		}
+		this.image = undefined;
+	}
+}
+
+reqQueueElement.prototype.render = function( pixelvaluefn, colorscale, options )
+{
+	let imgctx = this.image.getContext('2d');
+	
+	imgctx.clearRect( 0, 0, this.image.width, this.image.height );
+					
+	if( this.data ){
+		/*
+		var stateobject = {
+			lat:floorlat
+			,lon:flootlong
+			,latiter:floorlat
+			,loniter:flootlong
+			,xcount:0
+			,ycount:0
+			,xmax:60
+			,ymax:60
+			,latdelta:(1.0/60)
+			,londelta:(1.0/60)
+			,radius:10
+			,radiuslist:[5,7,9,10,11,13,15,30]
+			,radiuscount:0
+			,state:0
+			,data:{}
+			,resultkey:datasourcekey+'_'+floorlat+'_'+flootlong
+			,starttime:process.hrtime()
+		}
+		*/
+		var radius_index = -1;
+		var myradiuslist = this.data.radiuslist;
+		
+		if( myradiuslist ){
+		
+			var elmi = 0;
+			while( elmi < myradiuslist.length ){
+				if( myradiuslist[ elmi ] == options.radius ){//useradius ){
+					radius_index = elmi;
+					break
+				}
+				elmi += 1;
+			}
+			
+			if( radius_index < 0 ){
+				console.log( "Error, radius data mismatch ", this.lon, this.lat, options.radius, myradiuslist );
+				return false;
+			}
+			
+			//myradiuslist[ radius_index ]
+			let lon_min = Math.floor( this.lon*this.data.xmax );
+			let lat_min = Math.floor( this.lat*this.data.ymax );
+			let lon_max = lon_min + Math.floor( this.data.xmax )
+			let lat_max = lat_min + Math.floor( this.data.ymax )
+			//let dgrid = this.data.data;
+			
+			let py = 0;
+			let lat = lat_min;
+			while( lat < lat_max ){
+				let px = 0;
+				let lon = lon_min;
+				while( lon < lon_max ){
+					
+					//let pixeldata = dgrid[ lat ][ lon ][ radius_index ];
+					
+					var usevalue = pixelvaluefn( this.get_data_at( lat, lon, radius_index ), options );
+					
+					imgctx.fillStyle = value_to_color( usevalue, colorscale );
+					
+					imgctx.fillRect( px, this.image.height-1 - py, 1, 1 );	//NOTE we are flipping Y
+					
+					lon += 1;
+					px += 1;
+				}
+				lat += 1;
+				py += 1;
+			}
+		}else{
+			console.log( "Error, missing data ", this.data );
+		}
+	}
+}
+	
+reqQueueElement.prototype.render_debug = function()
+{
+	let imgctx = this.image.getContext('2d');
+				
+	let py = 0;
+	while( py < view_master_tilesize ){
+		let px = 0;
+		while( px < view_master_tilesize ){
+			
+			let r = Math.floor( Math.random()*255 )
+			let g = Math.floor( Math.random()*255 )
+			let b = Math.floor( Math.random()*255 )
+			imgctx.fillStyle = "rgba("+r+","+g+","+b+","+1+")";
+			imgctx.fillRect( px, py, 1, 1 );
+			
+			px += 1;
+		}
+		py += 1;
+	}
+	
+	let r = Math.floor( Math.random()*255 )
+	let g = Math.floor( Math.random()*255 )
+	let b = Math.floor( Math.random()*255 )
+	imgctx.fillStyle = "rgba("+r+","+g+","+b+","+0.5+")";
+	imgctx.fillRect( 0, 0, view_master_tilesize, view_master_tilesize );
+
+	imgctx.fillStyle = "rgba(0,0,0,1)";
+	imgctx.font = "16px Arial";
+	imgctx.fillText( this.lon, 0 ,20 );
+	imgctx.fillText( this.lat, 0 ,40 );
+
+}
+			
+					
+//
+//--------------------------------------------------------------------------
+//
+
+function printNDecimalDigits( v, k )
+{
+	var s = v + "";
+	var np = s.indexOf( '.' );
+	if( np > 0 ){
+		var cutto = np+1 + k;
+		if( cutto > np+1 ){
+			return s.substr( 0, np+1 + k )
+		}else{
+			return s.substr( 0, np )
+		}
+	}
+	return s;
+}
+
+function compute_pixel_value_thresholding( data, options )
+{
+	//	( ( (max - min) - options.threshold ) + 1 )/2
+	//		== 0.. 0.5 .. 1.0
+	//		0.5 == 0, 1.0 == +options.threshold, 0 == -options.threshold
+	//
+	return ( ( (( data[1] - data[0] ) - options.threshold )/options.threshold) + 1 )/2;
+}
+
+function compute_pixel_value_min( data, options )
+{
+	return data[0]/options.threshold;
+}
+
+function compute_pixel_value_max( data, options )
+{
+	return data[1]/options.threshold;
+}
+
+function compute_pixel_value_avg( data, options )
+{
+	return data[2]/options.threshold;
+}
+
+function compute_pixel_value_delta( data, options )
+{
+	return (data[1] - data[0])/options.threshold;
+}
+				
+//
+//--------------------------------------------------------------------------
+//
+
+var globalmap = undefined;
+var globaltiles = undefined;
+
+var ndt_colorScalings = {
+	//"name": [ [ value(0.0..1.0), r(0..255), g(0..255), b(0..255), a(0.0..1.0) ] ]
+	"Blue Red":[
+		[0.0,0,255,255,1]
+		,[0.5,0,0,255,1]
+		,[0.5,255,0,0,1]
+		,[1.0,255,255,0,1]
+	]
+	,"Vis Invis":[
+		[0.0,0,255,255,1]
+		,[0.5,0,0,255,1]
+		,[0.5,255,0,0,0]
+		,[1.0,255,255,0,0]
+	]
+	,"Invis Vis ":[
+		[0.0,0,255,255,0]
+		,[0.5,0,0,255,0]
+		,[0.5,255,0,0,1]
+		,[1.0,255,255,0,1]
+	]
+	,"Rainbow":[
+		 [0.0,0,0,0,1]
+		,[1/6.0,255,0,0,1]
+		,[2/6.0,255,0,0,1]
+		,[3/6.0,255,255,0,1]
+		,[4/6.0,0,255,0,1]
+		,[5/6.0,0,255,255,1]
+		,[6/6.0,0,0,255,1]
+	]
+	,"Stepbow":[
+		[0/6.0,255,0,0,1]
+		,[1/6.0,255,0,0,1]
+		
+		,[1/6.0,255,255,0,1]
+		,[2/6.0,255,255,0,1]
+		
+		,[2/6.0,0,255,0,1]
+		,[3/6.0,0,255,0,1]
+		
+		,[3/6.0,0,255,255,1]
+		,[4/6.0,0,255,255,1]
+		
+		,[4/6.0,0,0,255,1]
+		,[5/6.0,0,0,255,1]
+		
+		,[5/6.0,255,0,255,1]
+		,[6/6.0,255,0,255,1]
+	]
+	,"Greyscale":[
+		 [0.0,0,0,0,1]
+		,[1.0,255,255,255,1]
+	]
+	,"Viridis":rgbhextoColors("44015444025645045745055946075a46085c460a5d460b5e470d60470e6147106347116447136548146748166848176948186a481a6c481b6d481c6e481d6f481f70482071482173482374482475482576482677482878482979472a7a472c7a472d7b472e7c472f7d46307e46327e46337f463480453581453781453882443983443a83443b84433d84433e85423f854240864241864142874144874045884046883f47883f48893e49893e4a893e4c8a3d4d8a3d4e8a3c4f8a3c508b3b518b3b528b3a538b3a548c39558c39568c38588c38598c375a8c375b8d365c8d365d8d355e8d355f8d34608d34618d33628d33638d32648e32658e31668e31678e31688e30698e306a8e2f6b8e2f6c8e2e6d8e2e6e8e2e6f8e2d708e2d718e2c718e2c728e2c738e2b748e2b758e2a768e2a778e2a788e29798e297a8e297b8e287c8e287d8e277e8e277f8e27808e26818e26828e26828e25838e25848e25858e24868e24878e23888e23898e238a8d228b8d228c8d228d8d218e8d218f8d21908d21918c20928c20928c20938c1f948c1f958b1f968b1f978b1f988b1f998a1f9a8a1e9b8a1e9c891e9d891f9e891f9f881fa0881fa1881fa1871fa28720a38620a48621a58521a68522a78522a88423a98324aa8325ab8225ac8226ad8127ad8128ae8029af7f2ab07f2cb17e2db27d2eb37c2fb47c31b57b32b67a34b67935b77937b87838b9773aba763bbb753dbc743fbc7340bd7242be7144bf7046c06f48c16e4ac16d4cc26c4ec36b50c46a52c56954c56856c66758c7655ac8645cc8635ec96260ca6063cb5f65cb5e67cc5c69cd5b6ccd5a6ece5870cf5773d05675d05477d1537ad1517cd2507fd34e81d34d84d44b86d54989d5488bd6468ed64590d74393d74195d84098d83e9bd93c9dd93ba0da39a2da37a5db36a8db34aadc32addc30b0dd2fb2dd2db5de2bb8de29bade28bddf26c0df25c2df23c5e021c8e020cae11fcde11dd0e11cd2e21bd5e21ad8e219dae319dde318dfe318e2e418e5e419e7e419eae51aece51befe51cf1e51df4e61ef6e620f8e621fbe723fde725")
+	,"Plasma":rgbhextoColors("0d088710078813078916078a19068c1b068d1d068e20068f2206902406912605912805922a05932c05942e05952f059631059733059735049837049938049a3a049a3c049b3e049c3f049c41049d43039e44039e46039f48039f4903a04b03a14c02a14e02a25002a25102a35302a35502a45601a45801a45901a55b01a55c01a65e01a66001a66100a76300a76400a76600a76700a86900a86a00a86c00a86e00a86f00a87100a87201a87401a87501a87701a87801a87a02a87b02a87d03a87e03a88004a88104a78305a78405a78606a68707a68808a68a09a58b0aa58d0ba58e0ca48f0da4910ea3920fa39410a29511a19613a19814a099159f9a169f9c179e9d189d9e199da01a9ca11b9ba21d9aa31e9aa51f99a62098a72197a82296aa2395ab2494ac2694ad2793ae2892b02991b12a90b22b8fb32c8eb42e8db52f8cb6308bb7318ab83289ba3388bb3488bc3587bd3786be3885bf3984c03a83c13b82c23c81c33d80c43e7fc5407ec6417dc7427cc8437bc9447aca457acb4679cc4778cc4977cd4a76ce4b75cf4c74d04d73d14e72d24f71d35171d45270d5536fd5546ed6556dd7566cd8576bd9586ada5a6ada5b69db5c68dc5d67dd5e66de5f65de6164df6263e06363e16462e26561e26660e3685fe4695ee56a5de56b5de66c5ce76e5be76f5ae87059e97158e97257ea7457eb7556eb7655ec7754ed7953ed7a52ee7b51ef7c51ef7e50f07f4ff0804ef1814df1834cf2844bf3854bf3874af48849f48948f58b47f58c46f68d45f68f44f79044f79143f79342f89441f89540f9973ff9983ef99a3efa9b3dfa9c3cfa9e3bfb9f3afba139fba238fca338fca537fca636fca835fca934fdab33fdac33fdae32fdaf31fdb130fdb22ffdb42ffdb52efeb72dfeb82cfeba2cfebb2bfebd2afebe2afec029fdc229fdc328fdc527fdc627fdc827fdca26fdcb26fccd25fcce25fcd025fcd225fbd324fbd524fbd724fad824fada24f9dc24f9dd25f8df25f8e125f7e225f7e425f6e626f6e826f5e926f5eb27f4ed27f3ee27f3f027f2f227f1f426f1f525f0f724f0f921")
+	,"Inferno":rgbhextoColors("00000401000501010601010802010a02020c02020e03021004031204031405041706041907051b08051d09061f0a07220b07240c08260d08290e092b10092d110a30120a32140b34150b37160b39180c3c190c3e1b0c411c0c431e0c451f0c48210c4a230c4c240c4f260c51280b53290b552b0b572d0b592f0a5b310a5c320a5e340a5f3609613809623909633b09643d09653e0966400a67420a68440a68450a69470b6a490b6a4a0c6b4c0c6b4d0d6c4f0d6c510e6c520e6d540f6d550f6d57106e59106e5a116e5c126e5d126e5f136e61136e62146e64156e65156e67166e69166e6a176e6c186e6d186e6f196e71196e721a6e741a6e751b6e771c6d781c6d7a1d6d7c1d6d7d1e6d7f1e6c801f6c82206c84206b85216b87216b88226a8a226a8c23698d23698f24699025689225689326679526679727669827669a28659b29649d29649f2a63a02a63a22b62a32c61a52c60a62d60a82e5fa92e5eab2f5ead305dae305cb0315bb1325ab3325ab43359b63458b73557b93556ba3655bc3754bd3853bf3952c03a51c13a50c33b4fc43c4ec63d4dc73e4cc83f4bca404acb4149cc4248ce4347cf4446d04545d24644d34743d44842d54a41d74b3fd84c3ed94d3dda4e3cdb503bdd513ade5238df5337e05536e15635e25734e35933e45a31e55c30e65d2fe75e2ee8602de9612bea632aeb6429eb6628ec6726ed6925ee6a24ef6c23ef6e21f06f20f1711ff1731df2741cf3761bf37819f47918f57b17f57d15f67e14f68013f78212f78410f8850ff8870ef8890cf98b0bf98c0af98e09fa9008fa9207fa9407fb9606fb9706fb9906fb9b06fb9d07fc9f07fca108fca309fca50afca60cfca80dfcaa0ffcac11fcae12fcb014fcb216fcb418fbb61afbb81dfbba1ffbbc21fbbe23fac026fac228fac42afac62df9c72ff9c932f9cb35f8cd37f8cf3af7d13df7d340f6d543f6d746f5d949f5db4cf4dd4ff4df53f4e156f3e35af3e55df2e661f2e865f2ea69f1ec6df1ed71f1ef75f1f179f2f27df2f482f3f586f3f68af4f88ef5f992f6fa96f8fb9af9fc9dfafda1fcffa4")
+	,"Magma":rgbhextoColors("00000401000501010601010802010902020b02020d03030f03031204041405041606051806051a07061c08071e0907200a08220b09240c09260d0a290e0b2b100b2d110c2f120d31130d34140e36150e38160f3b180f3d19103f1a10421c10441d11471e114920114b21114e22115024125325125527125829115a2a115c2c115f2d11612f116331116533106734106936106b38106c390f6e3b0f703d0f713f0f72400f74420f75440f764510774710784910784a10794c117a4e117b4f127b51127c52137c54137d56147d57157e59157e5a167e5c167f5d177f5f187f601880621980641a80651a80671b80681c816a1c816b1d816d1d816e1e81701f81721f817320817521817621817822817922827b23827c23827e24828025828125818326818426818627818827818928818b29818c29818e2a81902a81912b81932b80942c80962c80982d80992d809b2e7f9c2e7f9e2f7fa02f7fa1307ea3307ea5317ea6317da8327daa337dab337cad347cae347bb0357bb2357bb3367ab5367ab73779b83779ba3878bc3978bd3977bf3a77c03a76c23b75c43c75c53c74c73d73c83e73ca3e72cc3f71cd4071cf4070d0416fd2426fd3436ed5446dd6456cd8456cd9466bdb476adc4869de4968df4a68e04c67e24d66e34e65e44f64e55064e75263e85362e95462ea5661eb5760ec5860ed5a5fee5b5eef5d5ef05f5ef1605df2625df2645cf3655cf4675cf4695cf56b5cf66c5cf66e5cf7705cf7725cf8745cf8765cf9785df9795df97b5dfa7d5efa7f5efa815ffb835ffb8560fb8761fc8961fc8a62fc8c63fc8e64fc9065fd9266fd9467fd9668fd9869fd9a6afd9b6bfe9d6cfe9f6dfea16efea36ffea571fea772fea973feaa74feac76feae77feb078feb27afeb47bfeb67cfeb77efeb97ffebb81febd82febf84fec185fec287fec488fec68afec88cfeca8dfecc8ffecd90fecf92fed194fed395fed597fed799fed89afdda9cfddc9efddea0fde0a1fde2a3fde3a5fde5a7fde7a9fde9aafdebacfcecaefceeb0fcf0b2fcf2b4fcf4b6fcf6b8fcf7b9fcf9bbfcfbbdfcfdbf")
+	,"CUSTOM":[
+		[0.0,255,255,255,1]
+		,[1.0,0,0,0,1]
+	]
+}
+
+var ndt_colorScaling = "";
+for( var val in ndt_colorScalings ){
+	ndt_colorScaling = val;
+	break;
+}
+
+var ndt_thresholdSelection = 900;	//integer please...
+
+var ndt_metricSelectionsThreshLabel = {	//ndt_thresholdLabel
+	"thresh":"Threshold (m)"
+	,"avg":"Maximum (m)"
+	,"min":"Maximum (m)"
+	,"max":"Maximum (m)"
+	,"delta":"Maximum (m)"
+}
+
+var ndt_metricSelectionsThreshEqn = {	//ndt_thresholdLabel
+	"thresh":{"min":-1,"max":1}
+	,"avg":{"min":0,"max":1}
+	,"min":{"min":0,"max":1}
+	,"max":{"min":0,"max":1}
+	,"delta":{"min":0,"max":1}
+}
+
+var ndt_metricSelections = {
+	"thresh":compute_pixel_value_thresholding
+	,"avg":compute_pixel_value_avg
+	,"min":compute_pixel_value_min
+	,"max":compute_pixel_value_max
+	,"delta":compute_pixel_value_delta
+}
+
+var ndt_metricSelection = "";
+for( var val in ndt_metricSelections ){
+	ndt_metricSelection = val;
+	break;
+}
+
+var ndt_radiusListMaster = [0,3,5,7,9,10,11,13,15,20]	//[5,7,9,10,11,13,15];	//removed 30, should add 0, 3 ?
+var ndt_radiusindexSelected = 5;
+
+var ndt_currentStyleSelected = -1;
+
+				
+//
+//--------------------------------------------------------------------------
+//
+
+var ndt_raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame
+
+var ndt_current_tiles_in_memory = {};
+var ndt_tile_request = undefined
+var ndt_tile_request_queue = [];
+var ndt_tile_request_queue_has = {};
+
+function ndt_make_image_from_data( hasobj )
+{
+	let regenimage = true;
+	var idata = hasobj.get_data();
+	if( idata ){
+	
+		regenimage = false;
+		
+		if( hasobj.image ){
+			
+			if( hasobj.coloring != ndt_colorScaling ){
+				
+				//RECOLOR image...
+				regenimage = true;
+				
+			}else if( hasobj.threshold != ndt_thresholdSelection ){
+				
+				//RECOLOR image...
+				regenimage = true;
+			}else if( hasobj.metric != ndt_metricSelection ){
+				
+				//RECOLOR image...
+				regenimage = true;
+			}else if( hasobj.radiusi != ndt_radiusindexSelected ){
+				
+				//RECOLOR image...
+				regenimage = true;
+			}else if( hasobj.laststyle != ndt_currentStyleSelected ){
+			
+				regenimage = true;
+			}
+			
+		}else{
+			
+			hasobj.image = document.createElement('canvas');
+			hasobj.image.width = hasobj.data.xmax;
+			hasobj.image.height = hasobj.data.ymax;
+			//hasobj.image.classList.add( "noselect" );
+			regenimage = true;
+		}
+		
+		if( regenimage ){
+			
+			//console.log( "REGEN " );//, hasobj.coloring, ndt_colorScaling, hasobj.threshold, ndt_thresholdSelection );
+			
+			//"render tile into image with colorscale"
+			hasobj.coloring = ndt_colorScaling;
+			hasobj.threshold = ndt_thresholdSelection;
+			hasobj.metric = ndt_metricSelection;
+			hasobj.radiusi = ndt_radiusindexSelected;
+			hasobj.laststyle = ndt_currentStyleSelected;
+			
+			//
+			
+			hasobj.render( 
+				ndt_metricSelections[ ndt_metricSelection ]
+				,ndt_colorScalings[ ndt_colorScaling ]
+				,{
+					radius:ndt_radiusListMaster[ ndt_radiusindexSelected ]
+					,threshold:ndt_thresholdSelection
+				}
+			);
+			
+			return true;
+		}
+
+		//let canvx = ( hasobj.lon - vlon_min )*view_master_tilesize;
+		//let canvy = ( hasobj.lat - vlat_min )*view_master_tilesize;
+		//ctx.drawImage( hasobj.image, 0, 0, hasobj.image.width, hasobj.image.height, canvx, canvy, view_master_tilesize, view_master_tilesize )
+	}
+	
+	return regenimage;
+}
+
+function ndt_frame()
+{
+	
+	if( ndt_tile_request ){	//Are we currently making a request?
+		
+		if( ndt_tile_request.completed ){	//Is the current request DONE?
+
+			ndt_tile_request.completed = false;
+		
+			let reqobj = new reqQueueElement( ndt_tile_request.lon, ndt_tile_request.lat, ndt_tile_request.result )
+
+
+			//NOW we draw the tile into the canvas
+			ndt_current_tiles_in_memory[ reqobj.get_key() ] = reqobj
+
+			console.log( reqobj );
+
+			//Draw into ONCE as a TEST:
+			if( globaltiles.hasOwnProperty( "_tiles" ) ){
+
+				for( let tilekey in globaltiles._tiles ){
+					
+					let tile = globaltiles._tiles[ tilekey ];
+
+					if( tile ){
+
+						let canny = tile.el;
+
+						let boundsy = canny.getAttribute( "boundsname" );
+
+						let boundcoords = boundsy.split(',')
+						let boundsfloats = boundcoords.map( parseFloat )
+
+						let boundsints = boundsfloats.map( Math.floor )	//Javascript bug
+						boundsints[2] += 1;
+						boundsints[3] += 1;
+
+						let cmpto = [ reqobj.lon, reqobj.lat ].map( parseFloat ).map( Math.floor );	//Javascript bug, strings????
+
+						//console.log( cmpto, boundsfloats, boundsints );
+
+						if( (cmpto[0] >= boundsints[0] )
+							&& (cmpto[1] >= boundsints[1] ) 
+							&& (cmpto[0] < boundsints[2] )
+							&& (cmpto[1] < boundsints[3] ) 
+							){
+
+							let ctx = canny.getContext('2d');
+
+							//"draw tile"
+
+							//This should be the tile
+							ndt_make_image_from_data( reqobj );
+
+							//var what = makeBogusExactImage( ilon/100, ilat/100, 10 )
+							var what = reqobj.image;
+
+							//console.log( "PASS", what, canny, reqobj  );
+
+							if( what.width > 0 && what.height > 0 ){
+
+								let lonmin = boundsfloats[0]
+								let latmin = boundsfloats[1]
+								let lonmax = boundsfloats[2]
+								let latmax = boundsfloats[3]
+
+								var scalext = (1.0/(lonmax-lonmin));	//SCALE for a 1x1 degree TILE
+								var scaleyt = (1.0/(latmax-latmin));
+								var pixelfx = ((cmpto[0] - lonmin)/(lonmax-lonmin))	//PIXEL offset from 0,0 for this 256x256 RENDERABLE tile
+								var pixelfy = ((cmpto[1] - latmin)/(latmax-latmin))
+
+								//AGAIN, Y is inverted in the rendering be careful >:C
+								ctx.imageSmoothingEnabled = false;		
+								ctx.drawImage( what, 0, 0, what.width, what.height
+									, pixelfx*canny.width
+									, canny.height*( 1 - pixelfy )- canny.height*scaleyt 
+									, canny.width*scalext
+									, canny.height*scaleyt 
+								);
+								ctx.imageSmoothingEnabled = true;		
+
+							}
+						}
+					}
+				}
+			}
+
+			//kill current request.
+			ndt_tile_request = undefined;
+		}
+	}else{
+
+		for( var qkeyi in ndt_tile_request_queue ){	//Get the FIRST request in queue
+
+			var qkey = ndt_tile_request_queue[ qkeyi ];	//Get that key
+
+			//Dequeue that qkey
+			delete ndt_tile_request_queue_has[ qkey ];
+			ndt_tile_request_queue.splice( ndt_tile_request_queue.indexOf( qkey ), 1 );
+
+			//we encoded the lat lon into a string since it's integers (lazyness)
+			var lonlatsplit = qkey.split( '_' );
+
+			//Create the URL and SEND THE REQUEST (only one at a time!)
+			var requrl = "ned1/getTile?lon="+Math.floor(lonlatsplit[0])+"&lat="+Math.floor(lonlatsplit[1]);
+
+			ndt_tile_request = new XMLHttpRequest();
+			ndt_tile_request.addEventListener( "load", function(){
+			
+				let obj = JSON.parse( ndt_tile_request.responseText );
+				ndt_tile_request.completed = true;
+				ndt_tile_request.result = obj;
+			} );
+			ndt_tile_request.open("GET", requrl );	//window.location.hostname +
+			ndt_tile_request.lat = lonlatsplit[1];
+			ndt_tile_request.lon = lonlatsplit[0];
+
+			ndt_tile_request.send();	//
+
+			break;	//Only the first element
+		}
+	}
+
+	//Do some kind of updating? ...
+	//
+	//Here are the canvases to DRAW INTO:
+	//
+	//	globaltiles
+	//		globaltiles._tiles{}.el = canvas	
+	//		globaltiles._container
+	//
+	//WE added a attribute "boundsname"
+	//	tile.setAttribute( "boundsname", ( [ilonmin, ilatmin, ilonmax, ilatmax] ).join( "," ) );
+	//
+	//So that each child tile tells us the RANGE of tiles to check...
+	//
+	//Now we can update the rendering as needed but...
+	//
+	//How to track it? (view changes, spiral iterator, parameter changes, etc...)
+	//
+	//
+	if( globaltiles.hasOwnProperty( "_tiles" ) ){
+
+		if( globaltiles._container ){
+
+			globaltiles._container.style.zIndex = 6;
+			// globaltiles._container.style.opacity = 0.6;
+
+		}
+
+		let keys = Object.keys( globaltiles._tiles );
+		let hitkey = keys[ Math.floor( Math.random()*keys.length ) ];
+
+		let tile = globaltiles._tiles[ hitkey ];
+		if( tile ){
+
+			let canny = tile.el;
+
+			let ctx = canny.getContext('2d');
+		}
+	}
+
+	ndt_raf( ndt_frame );
+}
+				
+//
+//--------------------------------------------------------------------------
+//
+
+
+function makeBogusImage( nrekt = 100 )
+	{
+		var can = document.createElement( "canvas" );
+		can.width = 60;
+		can.height = 60;
+
+		var canctx = can.getContext("2d");
+
+		canctx.imageSmoothingEnabled = false;
+
+		canctx.fillStyle = 
+			"rgba("
+			+Math.floor( 255*Math.random())
+			+","
+			+Math.floor( 255*Math.random())
+			+","
+			+Math.floor( 255*Math.random())
+			+",0.333)";
+		canctx.fillRect( 0, 0, can.width, can.height );
+
+		var i = 0;
+		while( i < nrekt ){
+
+			canctx.fillStyle = 
+				"rgba("
+				+Math.floor( 255*Math.random())
+				+","
+				+Math.floor( 255*Math.random())
+				+","
+				+Math.floor( 255*Math.random())
+				+",1)";
+			canctx.fillRect(
+				Math.floor( 64*Math.random()-4 )
+				, Math.floor( 64*Math.random()-4 )
+				, Math.floor( 12*Math.random() )
+				, Math.floor( 12*Math.random()  )
+			);
+
+			i += 1
+		}
+
+		return can;
+
+	}
+
+function domAddDragFunction( elm, usercallback )
+{
+	var target = this;
+	var tergetid = elm.id;
+	function SimpleFileDragHover(e) {
+
+		if( 
+			e.target.id == tergetid
+		//	|| e.target.id == "dragarea" 
+		){
+			e.stopPropagation();
+			e.preventDefault();
+			//e.target.className = (e.type == "dragover" ? "hover" : "");	//Uhmmm...
+			//e.target.style.cursor = 'default';
+			return true;
+		}
+		return false;
+	}
+
+function SimpleFileSelectHandler(e) 
+{
+		
+		// cancel event and hover styling
+		if( SimpleFileDragHover(e) ){
+
+			// fetch FileList object
+			var files = e.target.files || e.dataTransfer.files;
+
+			// process all File objects
+			for (var i = 0; i < files.length; i++) {
+				
+				usercallback( target, files[i] );
+			}
+			return true;
+		}
+		return false;
+	}
+
+	elm.addEventListener("dragover", SimpleFileDragHover, false);
+	elm.addEventListener("dragleave", SimpleFileDragHover, false);
+	elm.addEventListener("drop", SimpleFileSelectHandler, false);
+}
+
+//
+//--------------------------------------------------------------------------
+//
+/**
+ * Converts an HSL color value to RGB. Conversion formula
+ * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+ * Assumes h, s, and l are contained in the set [0, 1] and
+ * returns r, g, and b in the set [0, 255].
+ *
+ * @param   Number  h       The hue
+ * @param   Number  s       The saturation
+ * @param   Number  l       The lightness
+ * @return  Array           The RGB representation
+ */
+function hslToRgb(h, s, l) {
+  var r, g, b;
+
+  if (s == 0) {
+	r = g = b = l; // achromatic
+  } else {
+	function hue2rgb(p, q, t) {
+	  if (t < 0) t += 1;
+	  if (t > 1) t -= 1;
+	  if (t < 1/6) return p + (q - p) * 6 * t;
+	  if (t < 1/2) return q;
+	  if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+	  return p;
+	}
+
+	var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+	var p = 2 * l - q;
+
+	r = hue2rgb(p, q, h + 1/3);
+	g = hue2rgb(p, q, h);
+	b = hue2rgb(p, q, h - 1/3);
+  }
+
+  return [ r , g , b  ];
+}
+
+function makeBogusExactImage( x, y, nrekt = 0 )
+{
+	var can = document.createElement( "canvas" );
+	can.width = 60;
+	can.height = 60;
+
+	//return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+
+	var v = Math.sin( x * 12.9898 + y * 78.233 ) * 43758.5453;
+	var f = v - Math.floor(v);
+
+	var canctx = can.getContext("2d");
+
+	canctx.imageSmoothingEnabled = false;
+
+	//f -> hue -> rgba
+	var rgb = hslToRgb( f, 1.0, 0.5 );
+
+	canctx.fillStyle = "rgba("+Math.floor( 255*rgb[0])+","+Math.floor( 255*rgb[1])+","+Math.floor( 255*rgb[2])+",0.1)";
+	canctx.fillRect( 0, 0, can.width, can.height );
+
+	canctx.fillStyle = "rgba("+Math.floor( 255*rgb[0])+","+Math.floor( 255*rgb[1])+","+Math.floor( 255*rgb[2])+",0.3)";
+	canctx.fillRect( 0, 0, 1, can.height );
+	canctx.fillRect( can.width-1, 0, 1, can.height );
+	canctx.fillRect( 0, 0, can.width, 1 );
+	canctx.fillRect( 0, can.height-1, can.width, 1 );
+	//canctx.moveTo( 0, 0 );	//( can.width, can.height );
+	//canctx.lineTo( can.width, can.height );
+
+	//SEed it with the coordinate hash value (REALLY simple PRNG)
+	//Note this should be a class, and instanced for easier handling (proper asynch)
+	var deeseed = v;
+	function awdwaf(){
+		var res = 100*Math.sin( deeseed * 10000 + deeseed );
+		deeseed += 4.0/3;
+		return res - Math.floor( res );
+	}
+
+	var i = 0;
+	while( i < nrekt ){
+
+		canctx.fillStyle = 
+			"rgba("
+			+Math.floor( 255*awdwaf())
+			+","
+			+Math.floor( 255*awdwaf())
+			+","
+			+Math.floor( 255*awdwaf())
+			+",0.2)";
+		canctx.fillRect(
+			Math.floor( 64*awdwaf()-4 )
+			, Math.floor( 64*awdwaf()-4 )
+			, Math.floor( 12*awdwaf() )
+			, Math.floor( 12*awdwaf()  )
+		);
+
+		i += 1
+	}
+
+	return can;
+}
+
+
+//_______________________________________________________________________
+var ndt_current_polygon = undefined;
+
+function load_json( path, callback )
+{
+	var req = new XMLHttpRequest();
+	req.addEventListener( "load", function(){
+	
+		let obj = JSON.parse( req.responseText );
+		
+		callback( obj );
+	} );
+	req.open("GET", path );	//window.location.hostname +
+	req.send();
+}
+
+function ndt_add_geojson_layer( obj, beforeopt )
+{
+	if( globalmap.getLayer( obj.id ) ){
+
+		globalmap.getSource( obj.id ).setData( obj.source.data );
+	}else{
+		if( beforeopt ){
+			globalmap.addLayer( obj );
+		}else{
+			globalmap.addLayer( obj, beforeopt );
+		}
+	}
+}
+
+//ndt_current_polygon.id="part95dma"
+function ndt_load_containerized_layer( path, beforeopt )
+{
+	//"mbjson/part95dma.json"	
+	load_json( path, function( obj ){
+	
+		if( globalmap.getLayer( obj.id ) ){
+
+			globalmap.getSource( obj.id ).setData( obj.source.data );
+		}else{
+			if( beforeopt ){
+				globalmap.addLayer( obj );
+			}else{
+				globalmap.addLayer( obj, beforeopt );
+			}
+		}
+	} );
+}
+
+var ndt_slider_tiles_opacity_last = 0.5;
+
+function completeAndLoadSystem()
+{
+	
+	globalmap = L.map('map', {
+		//crs: L.CRS.Simple
+		center: [39.9,-105.2]	//lat, lon
+		,zoom: 12
+		,minZoom: 3
+		,maxZoom: 17
+		,zoomControl: false // set this to false initially to move it later
+	});
+
+
+
+	globaltilesblank = new L.GridLayer();
+	globaltilesblank.createTile = function(coords) {
+		//hah
+		var tile = L.DomUtil.create('canvas', 'leaflet-tile');
+		//console.log( this, globaltilesblank )
+		var size = globaltilesblank.getTileSize()
+		tile.width = size.x
+		tile.height = size.y
+
+		var ctx = tile.getContext('2d');
+		ctx.fillStyle = 'white';
+		ctx.fillRect(0, 0, tile.width, tile.height );
+
+		//ctx.fillStyle = "rgba(0.5,0.5,0.5,0.5)";
+		//ctx.fillRect( 0, 0, tile.width, tile.height );
+
+		return tile;
+	}
+
+	globaltiles = new L.GridLayer();
+
+	//console.log( tiles );	//tiles._tiles{}.el = canvas	tiles._container
+
+	globaltiles.createTile = function(coords) {
+	
+		var tile = L.DomUtil.create('canvas', 'leaflet-tile');
+		var size = this.getTileSize()
+		tile.width = size.x
+		tile.height = size.y
+
+		// calculate projection coordinates of top left tile pixel
+		var nwPoint = coords.scaleBy( size )
+
+		// calculate geographic coordinates of top left tile pixel
+		var nw = globalmap.unproject(nwPoint, coords.z)
+		var pointmax = nwPoint;
+		pointmax.x += size.x;
+		pointmax.y += size.y;
+		var nwmax = globalmap.unproject(pointmax, coords.z)
+
+		//Render into this tile... well this could get expensive! ( many many tiles to render... )
+		
+		var latmin = nwmax.lat;	//Tile corner coordiantes (corresponds to 0,0, ... 256,256 or tile.width, tile.height)
+		var lonmin = nw.lng;
+		var latmax = nw.lat;
+		var lonmax = nwmax.lng;
+		
+		var ctx = tile.getContext('2d');
+		
+		var ilatmin = Math.floor( nwmax.lat );
+		var ilonmin = Math.floor( nw.lng );
+		var ilatmax = Math.floor( nw.lat ) + 1;
+		var ilonmax = Math.floor( nwmax.lng ) + 1;
+
+		ctx.imageSmoothingEnabled = false;		
+
+		tile.setAttribute( "boundsname", ( [lonmin, latmin, lonmax, latmax] ).join( "," ) );
+
+		//TODO: Swap this out with spiral iterator loop instead (with bounding check)
+		for( var ilat = ilatmin; ilat < ilatmax; ilat += 1 ){
+			for( var ilon = ilonmin; ilon < ilonmax; ilon += 1 ){
+
+				//Does it already exist in memory?
+				let key = reqQueueElement.make_key( ilon, ilat );
+				if( ndt_current_tiles_in_memory.hasOwnProperty( key ) ){
+					
+					//Tile already in memory, so we CAN draw it immediately... IF it exists.
+					var reqobj = ndt_current_tiles_in_memory[ key ]
+
+					//This should be the tile
+					ndt_make_image_from_data( reqobj );
+
+					//var what = makeBogusExactImage( ilon/100, ilat/100, 10 )
+					var what = reqobj.image;
+
+					if( what.width > 0 && what.height > 0 ){
+
+						var scalext = (1.0/(lonmax-lonmin));	//SCALE for a 1x1 degree TILE
+						var scaleyt = (1.0/(latmax-latmin));
+						var pixelfx = ((ilon - lonmin)/(lonmax-lonmin))	//PIXEL offset from 0,0 for this 256x256 RENDERABLE tile
+						var pixelfy = ((ilat - latmin)/(latmax-latmin))
+
+						//AGAIN, Y is inverted in the rendering be careful >:C
+
+						ctx.drawImage( what, 0, 0, what.width, what.height
+							, pixelfx*tile.width
+							, tile.height*( 1 - pixelfy )- tile.height*scaleyt 
+							, tile.width*scalext
+							, tile.height*scaleyt 
+						);
+
+					}
+
+				}else{
+
+					//Queue that tile request
+					var qkey = ilon + "_"+ ilat;
+
+					//"Queue" order should be based on spiral index from center of screen...
+					//	TODO
+
+					if( ndt_tile_request_queue_has.hasOwnProperty( qkey ) ){
+
+						//Move it to FRONT of queue?
+						var ati = ndt_tile_request_queue.indexOf( qkey );
+						ndt_tile_request_queue.splice( ati, 1 );	//Remove from position
+						ndt_tile_request_queue.unshift( qkey );		//Add to front (highest priority)
+						//ndt_tile_request_queue.splice( ati, 1 );
+						//ndt_tile_request_queue.push( qkey );	//Add to back
+					}else{
+						ndt_tile_request_queue_has[ qkey ] = 0;		//Yup we exist now
+						ndt_tile_request_queue.unshift( qkey );		//Add to front (highest priority)
+						//ndt_tile_request_queue.push( qkey );		//Add to back
+					}
+				}
+			}
+		}
+		ctx.imageSmoothingEnabled = true;
+
+
+		if( false ){
+			ctx.font = '40px serif';
+			ctx.fillStyle = "rgba("	//"rgba(r,g,b,a)"
+				+Math.floor( 255*Math.random())
+				+","
+				+Math.floor( 255*Math.random())
+				+","
+				+Math.floor( 255*Math.random())
+				+",1)";
+			ctx.save()
+
+			ctx.translate( tile.width/2, tile.height/2 );
+			ctx.rotate( Math.random() * 7 );
+
+			ctx.fillText( "PoopView©", -tile.width/2, -40/2 );
+
+			ctx.restore()
+		}
+
+		if( false ){
+			var what = makeBogusImage( 5 )
+			ctx.imageSmoothingEnabled = false;
+			ctx.drawImage( what, 0, 0, what.width, what.height, 0, 0, tile.width, tile.height );
+			ctx.imageSmoothingEnabled = true;
+		}
+
+		if( false ){
+		
+			ctx.fillStyle = 'white';
+			ctx.fillRect(0, 0, size.x, 50);
+			ctx.fillStyle = 'black';
+			ctx.fillText('x: ' + coords.x + ', y: ' + coords.y + ', zoom: ' + coords.z, 20, 20);
+			ctx.fillText('lat: ' + nw.lat + ', lon: ' + nw.lng, 20, 40);
+			ctx.strokeStyle = 'red';
+			ctx.beginPath();
+			ctx.moveTo(0, 0);
+			ctx.lineTo(size.x-1, 0);
+			ctx.lineTo(size.x-1, size.y-1);
+			ctx.lineTo(0, size.y-1);
+			ctx.closePath();
+			ctx.stroke();
+		}
+		
+		return tile;
+	}
+
+
+	//BEST features only
+	streets = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+		, {
+		   attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>'
+		   ,opacity: 1
+		   ,zIndex: 9
+		});
+
+	//BEST hybrid
+	var Stamen_Terrain = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}'
+		, {
+			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+			,subdomains: 'abcd'
+			,minZoom: 0
+			,maxZoom: 17
+			,ext: 'png'
+			,zIndex: 9
+		}).addTo(globalmap);
+
+	//BEST terrain only
+	var Stamen_TerrainBackground = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}'
+		, {
+			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+			,subdomains: 'abcd'
+			,minZoom: 0
+			,maxZoom: 18
+			,ext: 'png'
+			,zIndex: 9
+		});
+
+	// BETTER hybrid
+	var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+		, {
+			attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+			,zIndex: 9
+		});
+
+	//SATELLITE
+	var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+		, {
+			attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+			,zIndex: 9
+		});
+
+	var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
+		, {
+			maxZoom: 17
+			,attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+			,zIndex: 9
+		});
+
+	var OpenStreetMap_HOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
+		, {
+			maxZoom: 19
+			,attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+			,zIndex: 9
+		});
+
+	var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
+		, {
+			maxZoom: 18
+			,attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+			,opacity: 0.9
+		   ,zIndex: 9
+		});
+
+	var CartoDB_Positron = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png'
+		, {
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+			,subdomains: 'abcd'
+			,maxZoom: 19
+			,zIndex: 9
+		});
+
+	var CartoDB_DarkMatter = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}{r}.png'
+		, {
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+			,subdomains: 'abcd'
+			,maxZoom: 19
+			,zIndex: 9
+		});
+
+	var GeoportailFrance_ignMaps = L.tileLayer('https://wxs.ign.fr/{apikey}/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=GEOGRAPHICALGRIDSYSTEMS.MAPS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}'
+		, {
+			attribution: '<a target="_blank" href="https://www.geoportail.gouv.fr/">Geoportail France</a>'
+			,bounds: [[-75, -180], [81, 180]]
+			,minZoom: 3
+			,maxZoom: 6
+			,apikey: 'choisirgeoportail'
+			,format: 'image/jpeg'
+			,style: 'normal'
+			,zIndex: 9
+		});
+
+	// //var Esri_WorldTerrain =
+	var hillshading = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}'
+		, {
+			attribution: 'Tiles &copy; Esri &mdash; Source: USGS, Esri, TANA, DeLorme, and NPS'
+			,maxZoom: 15
+			,opacity: 0.5
+			,zIndex: 1
+		}).addTo(globalmap);
+
+	// var Esri_WorldShadedRelief =
+	var hillandwatershading = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}'
+		, {
+			attribution: 'Tiles &copy; Esri &mdash; Source: Esri'
+			,maxZoom: 13
+			,opacity: 0.5
+			,zIndex: 2
+		});
+
+	var contours = L.tileLayer('http://{s}.tile.stamen.com/toposm-contours/{z}/{x}/{y}.png'
+		, {
+			zIndex: 5
+		}).addTo(globalmap);
+	
+	//make calculated tiles visible (checked) by default
+	globaltiles.addTo( globalmap )
+	//add empty geoJSON layer for part 95 fill in later
+	var part95poly = L.geoJSON().addTo( globalmap );
+
+	//globaltilesblank.addTo( globalmap )
+
+	var arpIcon = L.icon({
+		// iconUrl: 'icons/airport.png'
+		iconUrl: 'icons/arpmarker.png'
+		,iconSize: [40, 40]
+	});
+
+	var airports = L.layerGroup();
+
+	var arpsList = [];
+	var runways = {};
+	var airports = {};
+
+	function inlineAVG( crntAVG, newNum, count ) {
+		return ( crntAVG * (count/(count+1)) ) + newNum/(count+1);
+	}
+
+	//load in all airport locations
+	//calculate geoCenter of airport given all runways
+	load_json( "mbjson/nfdcRunways.json", function( obj ){
+		rws = obj; 
+
+		for( let idx in rws ) {
+			let rw = rws[idx];
+			if( rw.hasOwnProperty('lat') ) {
+				if( rw.icaoID != "" ) {
+					if( rw.icaoID in airports ) {
+
+						let id = airports[ rw.icaoID ].icaoID;
+						let clat = airports[ rw.icaoID ].lat;
+						let clon = airports[ rw.icaoID ].lon;
+						let count = airports[ rw.icaoID ].totalRWs;
+
+						airports[ rw.icaoID ] = {
+							"id": id
+							,"lat": inlineAVG( clat, rw.lat, count )
+							,"lon": inlineAVG( clon, rw.lon, count )
+							,"totalRWs": count+=1
+						}
+
+						}else{
+							airports[ rw.icaoID ] = { 
+								"id": rw.icaoID
+								,"lat": rw.lat
+								,"lon": rw.lon
+								,"totalRWs": 1
+						}
+					}
+				}
+			}
+		}
+		// console.log(airports)
+		for( let i in airports ) {
+			let ab = airports[i];
+				arpsList.push(L.marker(
+					[ab.lat, ab.lon]
+					, {
+						icon: arpIcon
+						,title: ab.id
+					}
+				));
+		}
+			
+		for( let shiti in arpsList ){
+			overlays[ "Airports" ].addLayer( arpsList[ shiti ] );
+		}
+	})
+
+	//random crap file from github
+	// load_json( "mbjson/airports.json", function( obj ){
+	// 		arplocs = obj; 
+	// 		// arplocs.id="arpLocations" 
+	// 		for( let i in arplocs ) {
+	// 			let ab = arplocs[i];
+	// 			arpsList.push(L.marker([ab.lat, ab.lon], {icon: arpIcon}));
+	// 		}
+	// 		console.log(arpsList)
+	// 		console.log(overlays[ "Airports" ])
+	// 		//overlays[ "Airports" ].addData( arpsList );
+	// 		for( let shiti in arpsList ){
+	// 			overlays[ "Airports" ].addLayer( arpsList[ shiti ] );
+	// 		}
+	// 	} )
+
+
+	// var arpsList = [];
+	//for each location
+	// arpsList.push(L.marker([lat, lon], {icon: arpIcon}));//.addTo(globalmap);
+
+	//add them all as a single layer
+	var arps = L.layerGroup(arpsList);
+	
+	var baseMaps = {
+		"Shaded Hybrid": Stamen_Terrain
+		,"Shaded Terrain": Stamen_TerrainBackground
+		,"Satellite": Esri_WorldImagery
+		,"Features": streets
+		,"OSM": OpenStreetMap_HOT
+		,"Light": CartoDB_Positron
+		,"Dark": CartoDB_DarkMatter
+		,"Hybrid": Esri_WorldTopoMap
+		,"TopOSM": OpenTopoMap
+		,"None": globaltilesblank
+	};
+
+	var overlays = {
+		"Contours": contours
+		,"Hill Shading": hillshading
+		// ,"Hill/Water Shading": hillandwatershading
+		// ,"Hill Shading": hillandwatershading
+		,"Airports": arps
+		,"Part 95 DMAs": part95poly
+		,"Calculated": globaltiles
+	};
+
+	load_json( "mbjson/part95dma.json", function( obj ){
+			ndt_current_polygon = obj; 
+			ndt_current_polygon.id="part95dma" 
+
+			overlays[ "Part 95 DMAs" ].addData( obj.source.data );
+
+			overlays[ "Part 95 DMAs" ].setStyle( {
+				//"fill-color": "#454545",
+				//"fill-opacity": 0.5
+			    "fillOpacity": 0.20
+			    ,"fillColor": "#000000"
+			    ,"color": "#000"   
+			    ,"weight": 0	//line thickness
+			    ,"fill": true
+			} )
+
+		} )
+
+
+	L.control.layers(baseMaps, overlays).addTo(globalmap)
+	current_style_is_loaded = true;
+	
+	L.control.zoom({
+		position:'topright'
+	}).addTo(globalmap);
+
+
+	globalmap.on('mousemove', function (e) {
+
+		let centerlon = Math.floor( e.latlng.lng );
+		let centerlat = Math.floor( e.latlng.lat );
+		let centerkey = reqQueueElement.make_key( centerlon, centerlat );
+		let tilesublon = Math.floor( 60*e.latlng.lng );
+		let tilesublat = Math.floor( 60*e.latlng.lat );
+
+		let strout = "<ul class=\"elementlist\">";
+			
+		if( ndt_current_tiles_in_memory.hasOwnProperty( centerkey ) ){
+
+			let tile = ndt_current_tiles_in_memory[ centerkey ];
+
+			var minmaxavgcount = tile.get_data_at( tilesublat, tilesublon, ndt_radiusindexSelected );
+			
+			// let strout = "";
+			strout += "<li>Min: " + printNDecimalDigits( minmaxavgcount[0],0 ) + "</li>"
+			strout += "<li>Max: " + printNDecimalDigits( minmaxavgcount[1],0 ) + "</li>"
+			strout += "<li>Avg: " + printNDecimalDigits( minmaxavgcount[2],0 ) + "</li>"
+
+		}
+
+		strout += "<li>Lat: "+Number.parseFloat( e.latlng.lat).toFixed(4)+"</li>"
+		// strout += "<br />"
+		strout += "<li>Lon: "+Number.parseFloat(e.latlng.lng).toFixed(4)+"</li>"
+
+		document.getElementById('info').innerHTML = strout;	//Anything that is a DOM element, avoid anoything but a direct assignment (avoids more reflows or other issues)
+	});
+
+	// globalmap.on('layeradd', function() {
+	// 	console.log(globalmap.hasLayer(hillshading));
+	// });
+
+	// console.log(globalmap.layers)
+	globaltiles.setOpacity(0.75)
+
+	
+	// part95poly.setOpacity(0.75)
+
+	//hardcoded for now
+	//get the html element for globaltiles generated by leaflet
+	var targel = document.getElementsByClassName("leaflet-control-layers-selector")[14]
+	replacestr = '<input id="slide" type="range" min="0" max="1" step="0.001" value="0.75">'
+	//replace checkbox with slider
+	targel.outerHTML = replacestr
+	//tie slider to opacity
+	var calcslider = document.getElementById("slide")
+	calcslider.addEventListener('input', function( e ) {
+		globaltiles.setOpacity( e.target.value );
+	});
+
+	var targel2 = document.getElementsByClassName("leaflet-control-layers-selector")[13]
+	replacestr2 = '<input id="slide2" type="range" min="0" max="1" step="0.001" value="0.20">'
+	//replace checkbox with slider
+	targel2.outerHTML = replacestr2
+	//tie slider to opacity
+	var calcslider2 = document.getElementById("slide2")
+	calcslider2.addEventListener('input', function( e ) {
+		part95poly.setStyle( {
+				//"fill-color": "#454545",
+				//"fill-opacity": 0.5
+			    //"fillOpacity": 0.5
+			    "fillColor": "#000000"
+			    ,"color": "#000"   
+			    ,"weight": 0	//line thickness
+			    ,"fill": true
+			    ,"fillOpacity": e.target.value
+			} );
+	});
+
+
+	if( true ){
+		
+		var domUIMaster = document.getElementById( 'ui_master' );
+	
+		var vistoggler = document.createElement('a');
+		vistoggler.href = '#';
+		vistoggler.classList.add( "myStyle" )
+		vistoggler.style.position="absolute";
+		vistoggler.style.left="0px";
+		vistoggler.style.top="0px";
+		vistoggler.textContent = "Hide";
+		
+		vistoggler.onclick = function (e) {
+			let hidethese = [ document.getElementById( 'ui_container' ), document.getElementById( 'info' ) ]
+			
+			if( hidethese[0].style.display == "none" ){
+				hidethese[0].style.display = "";
+				hidethese[1].style.display = "";
+				vistoggler.textContent = "Hide";
+			}else{
+				hidethese[0].style.display = "none";
+				hidethese[1].style.display = "none";
+				vistoggler.textContent = "Show";
+			}
+		}
+		
+		domUIMaster.appendChild( vistoggler );
+	}
+var domUIContainer = document.getElementById( 'ui_container' );
+		
+	if( true ){
+		
+		let block = document.createElement("div");
+		block.classList.add( "myStyle" );
+		
+			let titlex = document.createElement("div");
+			//subdivC.classList.add( "inline" );
+			titlex.classList.add( "myTextStyle" )
+			titlex.classList.add( "center" )
+			titlex.classList.add( "right" )
+			titlex.classList.add( "inline" )
+			//titlex.style.width = "99%"
+			titlex.innerHTML = "DMA Controls";
+		
+			block.appendChild( titlex );
+			
+			var clearR = document.createElement('a');
+			clearR.href = '#';
+			clearR.classList.add( "myStyle" )
+			clearR.classList.add( "inline" )
+			clearR.classList.add( "right" )
+			clearR.textContent = "Clear";
+			clearR.style.position = "absolute";
+			//clearR.style.float = "right";
+			clearR.style.top = "0px";
+			clearR.style.right = "0px";
+			//clearR.style.padding = "0px";
+			
+			clearR.onclick = function (e) {
+				
+				for( let key in ndt_current_tiles_in_memory ){
+					
+					ndt_mapbox_remtile( key );
+				}
+				
+			}
+		
+			block.appendChild( clearR );
+			
+		
+		domUIContainer.appendChild( block );
+		
+	}
+	
+	
+	if( false ){
+		//Map style dropdown:
+	
+		let block = document.createElement("div");
+		block.classList.add( "myStyle" );
+	
+			let label = document.createElement("div");
+			label.innerHTML = "Map Style:";
+			label.classList.add( "myTextStyle" );
+			label.classList.add( "inline" );
+			label.classList.add( "left" );
+			
+			block.appendChild( label );
+		
+			let selly = document.createElement("select");
+			selly.id = "styleselector";
+			selly.classList.add( "myStyle" );
+			selly.classList.add( "inline" );
+			selly.classList.add( "right" );
+			selly.name = "rtoggle";
+			var thesesfsa = [
+				{ "id":'cjaudgl840gn32rnrepcb9b9g', 'value':'shaded', 'selected':'true', 'name':'Shaded' }
+				,{ "id":'satellite-v9', 'value':'satellite', 'name':'Satellite' }
+				,{ "id":'basic-v9', 'value':'basic', 'name':'Basic' }
+				,{ "id":'light-v9', 'value':'light', 'name':'Light' }
+				,{ "id":'dark-v9', 'value':'dark', 'name':'Dark' }
+			];
+			for( let csi in thesesfsa ){
+				let cs = thesesfsa[ csi ];
+				let optio = document.createElement("option");
+				optio.id = cs.id;
+				optio.value = cs.value;
+				optio.classList.add( "myTextStyle" );
+				//optio.label = cs;
+				//optio.classList.add( "ui_select" );
+				//optio.classList.add( "uistyle"+"blocky" );
+				optio.innerHTML = cs.name;
+				if( optio.selected ){
+					optio.selected=true;
+				}
+				selly.appendChild( optio );
+			}
+			
+			selly.addEventListener("change", function(e){
+				var value = e.target.options[e.target.selectedIndex].value;
+				
+				var whatnow = e.target.options[e.target.selectedIndex].id
+				
+				console.log( value, whatnow )
+				
+				switchLayer( whatnow );
+				
+			} );
+
+			block.appendChild( selly );
+		
+		domUIContainer.appendChild( block );
+	}
+	
+	if( false ){
+	
+		let block = document.createElement("div");
+		block.classList.add( "myStyle" );
+	
+			let feset = document.createElement("fieldset");
+			feset.classList.add( "myTextStyle" );
+			feset.classList.add( "nothing" );
+			
+			let slidurr = document.createElement("input");
+			slidurr.classList.add( "myTextStyle" );
+			slidurr.id = "dmasliderbox";
+			slidurr.type = "range";
+			slidurr.min = 0
+			slidurr.max = 100
+			slidurr.step = 1
+			slidurr.value = 50	//
+			slidurr["data-show-value"]=true
+			
+			let slidurrlabel = document.createElement("label");
+			slidurrlabel.classList.add( "myTextStyle" );
+			slidurrlabel.innerHTML = 'Part 95 DMA opacity: '+ Math.floor( 100*ndt_slider_tiles_opacity_last)+"%";
+			slidurrlabel.for="dmasliderbox"
+			slidurrlabel.id = "toptitle_draggable"
+		
+			
+			slidurr.addEventListener('input', function(e) {
+				var alphao =parseInt( e.target.value, 10 )/100.0;
+				slidurrlabel.innerHTML = 'Part 95 DMA opacity: '+ Math.floor( 100*alphao)+"%";
+				let maplayerkey = "part95dma";
+				if( globalmap.getLayer( maplayerkey ) ){					
+					globalmap.setPaintProperty( maplayerkey, 'fill-opacity'/*'fill-opacity'*/, alphao );					
+				}
+			});
+		
+			slidurr.addEventListener('change', function(e) {
+				var alphao =parseInt( e.target.value, 10 )/100.0;
+				slidurrlabel.innerHTML = 'Part 95 DMA opacity: '+ Math.floor( 100*alphao)+"%";
+				let maplayerkey = "part95dma";
+				if( globalmap.getLayer( maplayerkey ) ){					
+					globalmap.setPaintProperty( maplayerkey, 'fill-opacity'/*'fill-opacity'*/, alphao );					
+				}
+			});
+			
+			feset.appendChild( slidurrlabel );		
+			feset.appendChild( document.createElement("br") );		
+			feset.appendChild( slidurr );
+			
+			let slidurrout = document.createElement("label");
+			slidurrout.classList.add( "myTextStyle" );
+			slidurrout.for="dmasliderbox"
+			feset.appendChild( slidurrout );
+			
+			//let divo = document.createElement("div");
+			//divo.appendChild( feset );
+			block.appendChild( feset );
+			
+		domUIContainer.appendChild( block );
+	}
+	
+	if( false ){
+		
+		let block = document.createElement("div");
+		block.classList.add( "myStyle" );
+	
+		
+			let feset = document.createElement("fieldset");
+			feset.classList.add( "myTextStyle" );
+			feset.classList.add( "nothing" );
+			
+			let slidurr = document.createElement("input");
+			slidurr.classList.add( "myTextStyle" );
+			slidurr.id = "tileopasliderbox";
+			slidurr.type = "range";
+			slidurr.min = 0
+			slidurr.max = 100
+			slidurr.step = 1
+			slidurr.value = 50	//
+			slidurr["data-show-value"]=true
+			
+			let slidurrlabel = document.createElement("label");
+			slidurrlabel.classList.add( "myTextStyle" );
+			slidurrlabel.innerHTML = 'Calculated tiles opacity: '+ Math.floor( 100*ndt_slider_tiles_opacity_last)+"%";
+			slidurrlabel.for="tileopasliderbox"
+			
+			slidurr.addEventListener('input', function(e) {
+				
+				var alphao =parseInt( e.target.value, 10 );
+				
+				ndt_slider_tiles_opacity_last = Math.floor( alphao )/100.0;
+				slidurrlabel.innerHTML = 'Calculated tiles opacity: '+ Math.floor( 100*ndt_slider_tiles_opacity_last)+"%";
+				
+				for( let key in ndt_current_tiles_in_memory ){
+					
+					let maplayerkey = "tile_"+key;
+					if( globalmap.getLayer( maplayerkey ) ){
+						
+						globalmap.setPaintProperty( maplayerkey, 'raster-opacity'/*'raster-opacity'*/, ndt_slider_tiles_opacity_last );
+						
+					}else{
+						
+					}
+				}
+			});
+		
+			slidurr.addEventListener("change", function(e){
+				ndt_slider_tiles_opacity_last = Math.floor( parseInt( e.target.value, 10 ) )/100.0;
+				slidurrlabel.innerHTML = 'Calculated tiles opacity: '+ Math.floor( 100*ndt_slider_tiles_opacity_last)+"%";
+			} )
+			
+			feset.appendChild( slidurrlabel );		
+			feset.appendChild( document.createElement("br") );		
+			feset.appendChild( slidurr );
+			
+			let slidurrout = document.createElement("label");
+			slidurrout.classList.add( "myTextStyle" );
+			slidurrout.for="dmasliderbox"
+			feset.appendChild( slidurrout );
+			
+			//let divo = document.createElement("div");
+			//divo.appendChild( feset );
+			block.appendChild( feset );
+			
+		domUIContainer.appendChild( block );
+	}
+	
+	if( true ){
+	
+		let block = document.createElement("div");
+		block.classList.add( "myStyle" );
+		
+			let label = document.createElement("div");
+			label.innerHTML = "Color Scheme:";
+			label.classList.add( "inline" );
+			label.classList.add( "myTextStyle" );
+			label.classList.add( "left" );
+			
+			label.id = "draggable_color_scheme";
+			
+			block.appendChild( label );
+			
+			
+			
+			let selly = document.createElement("select");
+			selly.id = "select_colorscheme";
+			//selly.classList.add( "uistyle"+"blocky" );
+			selly.classList.add( "myStyle" );
+			selly.classList.add( "inline" );
+			selly.classList.add( "right" );
+			selly.name = "Color Scheme";
+			for( let cs in ndt_colorScalings ){
+				let optio = document.createElement("option");
+				optio.value = cs;
+				//optio.label = cs;
+				//optio.classList.add( "ui_select" );
+				//optio.classList.add( "uistyle"+"blocky" );
+				optio.innerHTML = cs;
+				if( ndt_colorScaling == cs ){
+					optio.selected=true;
+				}
+				selly.appendChild( optio );
+			}
+			
+			selly.addEventListener("change", function(e){
+				var value = e.target.options[e.target.selectedIndex].value;
+				
+				if( ndt_colorScalings.hasOwnProperty( value ) ){
+					ndt_colorScaling = value;
+				}else{
+					console.log( "impossible select hack, missing value " + value );
+				}
+				
+				/* Hmmmm... */
+				let simpleshow = document.getElementById("colorschemeshowcanvas");
+				let imgc = simpleshow.getContext("2d");
+				var usecs = ndt_colorScalings[ ndt_colorScaling ]
+				imgc.clearRect( 0, 0, simpleshow.width, simpleshow.height );
+				for( let i = 0; i < simpleshow.width; i += 1 ){
+					imgc.fillStyle = value_to_color( 1.0*i/(simpleshow.width-1), usecs );
+					imgc.fillRect( i , 0 , 1 , simpleshow.height );
+				}
+				
+				//console.log( "Change  color scheme ", value );
+				//Request a REDRAW (hm...)
+			} );
+			
+			block.appendChild( selly );
+			
+			
+			let simpleshowcont = document.createElement("div");
+			simpleshowcont.classList.add( "block" );
+			simpleshowcont.style.width = "100%"
+			simpleshowcont.style.height = "100%"
+			simpleshowcont.id="colorschemeshow";
+			
+			let simpleshow = document.createElement("canvas");
+			simpleshow.width = 64;
+			simpleshow.height = 32;
+			simpleshowcont.classList.add( "nothing" );
+			simpleshow.style.width = "100%"
+			simpleshow.style.height = "16px"
+			simpleshow.id="colorschemeshowcanvas";
+			
+			/* Hmmmm... */
+			let imgc = simpleshow.getContext("2d");
+			var usecs = ndt_colorScalings[ ndt_colorScaling ]
+			for( let i = 0; i < simpleshow.width; i += 1 ){
+				imgc.fillStyle = value_to_color( 1.0*i/(simpleshow.width-1), usecs );
+				imgc.fillRect( i , 0 , 1 , simpleshow.height );
+			}
+			
+			simpleshowcont.appendChild( simpleshow );
+			
+			//okay, now what?
+			let subdiv = document.createElement("div");
+			subdiv.classList.add( "nothing" );
+			subdiv.classList.add( "block" );
+			subdiv.style.width = "100%"
+			
+			let subdivL = document.createElement("span");
+			//subdivL.classList.add( "inline" );
+			subdivL.classList.add( "left" );
+			subdivL.innerHTML = "0.0";
+			subdivL.style.float = "left";
+			subdivL.id="subdivLlabel"
+			
+			let subdivC = document.createElement("span");
+			//subdivC.classList.add( "inline" );
+			subdivC.style.width = "99%"
+			subdivC.innerHTML = "0.5";
+			subdivC.style.float = "center";
+			subdivC.id="subdivClabel"
+			
+			let subdivR = document.createElement("span");
+			//subdivR.classList.add( "inline" );
+			subdivR.classList.add( "right" );
+			subdivR.innerHTML = "1.0";
+			subdivR.style.float = "right";
+			subdivR.id="subdivRlabel"
+			
+			subdiv.appendChild( subdivL );
+			subdiv.appendChild( subdivC );
+			subdiv.appendChild( subdivR );
+			
+			simpleshowcont.appendChild( subdiv );
+			
+			block.appendChild( simpleshowcont );
+			
+		domUIContainer.appendChild( block );
+	}
+	
+	
+	if( true ){
+	
+		let block = document.createElement("div");
+		block.classList.add( "myStyle" );
+		
+			let label = document.createElement("div");
+			label.innerHTML = "Calculation:";
+			label.classList.add( "myTextStyle" );
+			label.classList.add( "inline" );
+			label.classList.add( "left" );
+			block.appendChild( label );
+			
+			let metho = document.createElement("select");
+			metho.id = "select_methodo";
+			//metho.classList.add( "uistyle"+"blocky" );
+			//metho.classList.add( "noselect" );
+			metho.classList.add( "myStyle" );
+			metho.classList.add( "inline" );
+			metho.classList.add( "right" );
+			metho.name = "Method";
+			for( let cs in ndt_metricSelections ){
+				let optio = document.createElement("option");
+				optio.value = cs;
+				//optio.label = cs;
+				//optio.classList.add( "ui_select" );
+				//optio.classList.add( "uistyle"+"blocky" );
+				optio.innerHTML = cs;
+				if( cs == ndt_metricSelection ){
+					optio.selected=true;
+				}
+				metho.appendChild( optio );
+			}
+			
+			metho.addEventListener("change", function(e){
+				var value = e.target.options[e.target.selectedIndex].value;
+				
+				if( ndt_metricSelections.hasOwnProperty( value ) ){
+					ndt_metricSelection = value;
+				}else{
+					console.log( "impossible select hack, missing value " + value );
+				}
+				
+				var wafs = document.getElementById( 'thresholdSlider' );
+				wafs.updateLabel();
+				
+			} );
+			
+			block.appendChild( metho );
+			
+		domUIContainer.appendChild( block );
+	}
+	
+	if( true ){
+		let block = document.createElement("div");
+		block.classList.add( "myStyle" );
+		
+			let label = document.createElement("div");
+			label.innerHTML = "Radius (NM):";
+			label.classList.add( "myTextStyle" );
+			label.classList.add( "inline" );
+			label.classList.add( "left" );
+			block.appendChild( label );
+			
+				
+			let radoi = document.createElement("select");
+			radoi.id = "select_radoi";
+			//radoi.classList.add( "uistyle"+"blocky" );
+			//radoi.classList.add( "noselect" );
+			radoi.classList.add( "myStyle" );
+			radoi.classList.add( "inline" );
+			radoi.classList.add( "right" );
+			radoi.name = "Radius";
+			let nthoption = 0;
+			for( let csi in ndt_radiusListMaster ){
+				let cs = ndt_radiusListMaster[ csi ];
+				let optio = document.createElement("option");
+				optio.value = cs;
+				//optio.label = cs;
+				//optio.classList.add( "ui_select" );
+				//optio.classList.add( "uistyle"+"blocky" );
+				optio.innerHTML = cs;
+				if( nthoption == ndt_radiusindexSelected ){
+					optio.selected=true;
+				}
+				radoi.appendChild( optio );
+				nthoption += 1;
+			}
+			
+			radoi.addEventListener("change", function(e){
+				var value = e.target.options[e.target.selectedIndex].value;
+				
+				for( let ri in ndt_radiusListMaster ){
+					if( ndt_radiusListMaster[ ri ] == value ){
+						ndt_radiusindexSelected = ri;
+						return;
+					}
+				}
+				
+				console.log( "impossible select hack, missing radius value " + value );
+			} );
+			
+			block.appendChild( radoi );
+			
+		domUIContainer.appendChild( block );
+		
+	}
+	
+	if( true ){
+	
+		let block = document.createElement("div");
+		block.classList.add( "myStyle" );
+	
+		
+			let feset = document.createElement("fieldset");
+			feset.classList.add( "myTextStyle" );
+			feset.classList.add( "nothing" );
+			
+			let slidurr = document.createElement("input");
+			slidurr.classList.add( "myTextStyle" );
+			slidurr.id = "thresholdSlider";
+			slidurr.type = "range";
+			slidurr.min = 10
+			slidurr.max = 4000
+			slidurr.step = 10
+			slidurr.value = ndt_thresholdSelection	//
+			slidurr["data-show-value"]=true
+			
+			function updatethatstuff(){
+				
+				//ndt_thresholdSelection
+				
+				var vmin = ndt_thresholdSelection * ndt_metricSelectionsThreshEqn[ ndt_metricSelection ].min;
+				var vmax = ndt_thresholdSelection * ndt_metricSelectionsThreshEqn[ ndt_metricSelection ].max;
+				
+				document.getElementById( "subdivLlabel" ).innerHTML = vmin
+				document.getElementById( "subdivClabel" ).innerHTML = Math.round( (vmax + vmin) / 2 )
+				document.getElementById( "subdivRlabel" ).innerHTML = vmax
+			}
+			
+			slidurr.updateLabel = function() {
+				slidurrlabel.innerHTML = ndt_metricSelectionsThreshLabel[ ndt_metricSelection ]+": " + ndt_thresholdSelection;
+				updatethatstuff();
+			}
+			
+			let slidurrlabel = document.createElement("label");
+			slidurrlabel.classList.add( "myTextStyle" );
+			
+			slidurrlabel.innerHTML = ndt_metricSelectionsThreshLabel[ ndt_metricSelection ]+': '+ ndt_thresholdSelection;
+				updatethatstuff();
+			slidurrlabel.for="thresholdSlider"
+			
+			slidurr.addEventListener('input', function(e) {
+				ndt_thresholdSelection = Math.floor( e.target.value );
+				slidurrlabel.innerHTML = ndt_metricSelectionsThreshLabel[ ndt_metricSelection ]+": " + ndt_thresholdSelection;
+				updatethatstuff();
+			});
+			
+			slidurr.addEventListener('change', function(e) {
+				ndt_thresholdSelection = Math.floor( e.target.value );
+				slidurrlabel.innerHTML = ndt_metricSelectionsThreshLabel[ ndt_metricSelection ]+": " + ndt_thresholdSelection;
+				updatethatstuff();
+			});
+			
+			feset.appendChild( slidurrlabel );		
+			feset.appendChild( document.createElement("br") );		
+			feset.appendChild( slidurr );
+			
+			let slidurrout = document.createElement("label");
+			slidurrout.classList.add( "myTextStyle" );
+			slidurrout.for="thresholdSlider"
+			feset.appendChild( slidurrout );
+			
+			block.appendChild( feset );
+			
+		domUIContainer.appendChild( block );
+	}
+		
+	//
+	//New special function:
+	//
+	if( false ) {
+		var sliderbox = document.getElementById( 'toptitle_draggable' );
+		domAddDragFunction( sliderbox, function( atarget, fileobj ){
+		
+			var cutidex = fileobj.name.lastIndexOf("."); 
+			if( cutidex >= 0 ){
+				var fileext = fileobj.name.substr( cutidex + 1 ).toLowerCase();
+				
+				if( fileext == "json" ){
+				
+					//Load it:
+					var filename = fileobj.name;	//Hmmm...
+
+					var reader = new FileReader();
+
+					reader.onload = function(e) {
+					
+						var job = JSON.parse( reader.result );
+						
+						//now what?
+						ndt_current_polygon = job;
+						ndt_current_polygon.id = "part95dma";	//Hack
+						
+						ndt_add_geojson_layer( ndt_current_polygon );
+					}
+
+					reader.readAsText( fileobj );
+					
+				}else{
+					
+					trace( "Unknown extension: ", fileext, fileobj.name );
+				}
+			}else{
+				trace( "Has no extension: ", fileobj.name );
+			}
+		});
+	}
+	var sliderbox = document.getElementById( 'draggable_color_scheme' );
+	domAddDragFunction( sliderbox, function( atarget, fileobj ){
+		
+		
+		var cutidex = fileobj.name.lastIndexOf("."); 
+		if( cutidex >= 0 ){
+			var fileext = fileobj.name.substr( cutidex + 1 ).toLowerCase();
+			
+			if( fileext == "json" ){
+			
+				//Load it:
+				var filename = fileobj.name;	//Hmmm...
+
+				var reader = new FileReader();
+
+				reader.onload = function(e) {
+				
+					var job = JSON.parse( reader.result );
+					
+					//ADD custom color scheme... HOWEVER this is a UNSTABLE sort
+					//job.sort( function(a,b){ 
+					//	if( a[0] == b[0] ){ return -1; }
+					//	return a[0] - b[0]; 
+					//} );
+					
+					var vmin = job[0][0];
+					var vmax = job[0][0];
+					for( var rowi in job ){
+						let row = job[ rowi ];
+						if( row[0] < vmin ){ vmin = row[0]; }
+						if( row[0] > vmax ){ vmax = row[0]; }
+					}
+					var vdelta = 1;
+					if( vmax > vmin ){
+						vdelta = vmax - vmin;
+					}
+					
+					let R = [];
+					for( var rowi in job ){
+						let row = job[ rowi ];
+						row[0] = ( row[0] - vmin ) / vdelta;
+						R.push( row );
+					}
+					
+					//console.log( R );
+					
+					ndt_colorScalings[ "CUSTOM" ] = R
+					
+					//regenerate color scheme
+					document.getElementById("select_colorscheme").dispatchEvent( new Event('change') );
+					
+					//change color scheme name for all tiles using this...
+					
+					for( let key in ndt_current_tiles_in_memory ){
+						
+						let dtile = ndt_current_tiles_in_memory[ key ]
+						
+						if( dtile.coloring == "CUSTOM" ){
+							
+							dtile.coloring = undefined;
+						}
+					}	
+				}
+
+				reader.readAsText( fileobj );
+				
+			}else{
+				
+				trace( "Unknown extension: ", fileext, fileobj.name );
+			}
+		}else{
+			trace( "Has no extension: ", fileobj.name );
+		}
+	});
+
+	ndt_frame();
+}
+
+function updateOpacity( e ) {
+	globaltiles.setOpacity( e.target.value );
+}
+
+function init(){
+
+	var ss = document.getElementById("splashscreen" );
+	var b = document.createElement('a');
+	b.href = '#';
+	b.classList.add( "splashscreenbutton" )
+	//b.style.position="relative";
+	//b.style.left="50%";
+	//b.style.top="50%";
+	//b.style.valign="center";
+	//b.style.halign="center";
+	b.textContent = "";
+	
+	var dub = document.createElement("p");
+	dub.classList.add( "titlep" )
+	dub.innerHTML = "<b class=\"title\">DMA Visualization Tool</b><br></br>Redacted<br></br>This system is EXPERIMENTAL and is for informational/experimental purposes only.<br></br>Not to be used as a decision making tool.<br></br>Click here to accept and continue"
+
+	b.appendChild( dub );
+	
+	b.onclick = function (e) {
+		ss.style.display = "none"
+		completeAndLoadSystem();
+	}
+	
+	ss.appendChild( b );
+	
+	
+	var sub = document.createElement("a");
+	sub.classList.add( "myTextStyle" )
+	sub.style.position="absolute";
+	sub.style.left="0px";
+	sub.style.bottom="0px";
+	sub.innerHTML = "Redacted"
+	
+	//Client-ServerDiagram.svg
+	
+	sub.onclick = function (e) {
+		if( e.clientX > 500 ){
+			window.open('infopage2.html')
+		}else{
+			window.open('infopage.html')
+		}
+	}
+	
+	//document.getElementById("userspan2a" ).onclick = function (e) {
+	//	window.open('infopage2.html')
+	//}
+	
+	ss.appendChild( sub );
+}
+
+window.onload = init;
+
+
+</script>
+</body>
+</html>
