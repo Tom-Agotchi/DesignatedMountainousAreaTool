@@ -1,5 +1,5 @@
 # DesignatedMountainousTerrainTool
-Interactive tool that allows the user to adjust the parameters used in determining Designated Mountainous Areas and visualize the result in various ways. Node.js is used for the serverside code, and the clientside code is just javascript, HTML, and CSS. Tiles are precomputed using python and stored as JSON.
+Interactive tool that allows the user to adjust the parameters used in determining Designated Mountainous Areas and visualize the result in various ways. Node.js is used for the serverside code, and the clientside code is just javascript, HTML, and CSS. Tiles are precomputed at 1 degree latitude by 1 degree longitude resolution using python and stored as JSON.
 
 Designated Mountainous Areas (DMAs) were defined in the 1950's by just drawing simple bounding polygons on a map. The airspace in these areas have significantly different rules, and over the years, some exceptions have been made to omit areas from the original polygons, effectively designating them as non-mountainous.
 
@@ -9,9 +9,10 @@ This uses either the National Elevation Dataset (NED) or Digital Terrain Elevati
 
 ![CONUS ICAO Definition](images/CONUS_ICAOdef_blueRed.PNG)
 ![CONUS ICAO Definition](images/CONUS_radius5NMthreshold900m_blueRed_solid.PNG)
+![CONUS ICAO Definition](images/DenverContoursICAOdef2.PNG)
 ![CONUS ICAO Definition](images/eastICAOdef_lowHigh_invisVis_sat.PNG)
 ![CONUS ICAO Definition](images/easternICAOdef.PNG)
-![CONUS ICAO Definition](images/westernICAOdef.PNG)
+![CONUS ICAO Definition](images/eastICAOdef_rainbow_base.PNG)
 ![CONUS ICAO Definition](images/CONUS_avg_0to4000m_inferno_solid.PNG)
 ![CONUS ICAO Definition](images/CONUS_avg_0to4000m_viridis_solid_hillshaded.PNG)
 ![CONUS ICAO Definition](images/CONUS_avg_0to4000m_inferno_solid.PNG)
