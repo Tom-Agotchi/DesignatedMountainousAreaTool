@@ -22,6 +22,6 @@ How to use
 ----------
 (only tested on windows 7 and windows 10 using either firefox or chrome browser)
 1. Run terrSimpleSvr.bat at DesignatedMountainousTerrainTool\srv\code\terrSimpleSvr.bat  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Server listening on port 8123 by default
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Server listening on port 8123 by default
 2. Connect clients by going to [serverIP]:[port]/vis2.html for Leaflet.js version  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Connect clients by going to [serverIP]:[port]/vis.html for MapBox version (requires API access token)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Connect clients by going to [serverIP]:[port]/vis.html for MapBox version (requires API access token)
